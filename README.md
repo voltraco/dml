@@ -22,7 +22,7 @@ if (result.length === 0) console.log('No errors!')
 else console.log(result.errors)
 ```
 
-### `Function` Models.create(`Object` object)
+### `Function` Models.create(`Object` obj)
 `create(object)` accepts an object with 
 [`object paths`](https://github.com/mariocasciaro/object-path) for keys and
 `validation functions` for values, returns a `validator` function.
@@ -33,9 +33,21 @@ let v = Models.create({
 })
 ```
 
-### `Function` Models.validators([`Boolean` Optional]])
+### `Function` Models.validators([`Boolean` optional]])
 Returns a chainable set of validator functions via 
-[`validimir`](https://github.com/juliangruber/validimir).
+[`validimir`](https://github.com/juliangruber/validimir). Validators cover
+a good number of use cases, here are a few examples...
+
+```js
+// an item is in an array
+Models.validators().of(['foo', 'bar'])('foo')
+
+// a custom pattern match
+Models.validators().match(/\d/, 'A password must contain at least one number')
+
+// a range
+Models.validators().len({ gt: 3, lte: 10 })('a')
+```
 
 ### `Object` validate(`Object` object[, `Boolean` sanitize])
 The `validator` function only cares about property paths that are specified
