@@ -1,0 +1,26 @@
+{
+  "name": "node-models",
+  "version": "1.1.0",
+  "description": "A minimalist models module backed by validimir",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voltraco/node-models.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/voltraco/node-models/issues"
+  },
+  "homepage": "https://github.com/voltraco/node-models#readme",
+  "dependencies": {
+    "object-path": "^0.9.2",
+    "validimir": "^1.5.0"
+  },
+  "devDependencies": {
+    "tape": "^4.4.0"
+  }
+}
