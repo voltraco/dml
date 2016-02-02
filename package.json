@@ -1,6 +1,6 @@
 {
   "name": "node-models",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A minimalist models module backed by validimir",
   "main": "index.js",
   "scripts": {
