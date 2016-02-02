@@ -1,5 +1,5 @@
 # SYNOPSIS
-Model minimalism backed by [`validimir`](https://github.com/juliangruber/validimir).
+Models backed by [`validimir`](https://github.com/juliangruber/validimir).
 Define, validate and sanitize without any DSLs or schema languages.
 
 # BUILD
@@ -25,7 +25,7 @@ else console.log(result.errors)
 ### `Function` Models.create(`Object` object)
 `create(object)` accepts an object with 
 [`object paths`](https://github.com/mariocasciaro/object-path) for keys and
-`validation functions` for values, returns a validator function.
+`validation functions` for values, returns a `validator` function.
 
 ```js
 let v = Models.create({
@@ -33,11 +33,15 @@ let v = Models.create({
 })
 ```
 
+### `Function` Models.validators([`Boolean` Optional]])
+Returns a chainable set of validator functions via 
+[`validimir`](https://github.com/juliangruber/validimir).
+
 ### `Object` validate(`Object` object[, `Boolean` sanitize])
-Validation is only applied to property paths that are specified in the model,
-that way you can be libeal with data and strict about specific details. You
-can also pass a bool as the second parameter which will remove any properties
-that have not been specified in the model.
+The `validator` function only cares about property paths that are specified
+in the model, that way you can be libeal with data and strict about specific
+details. You can also pass a bool as the second parameter which will remove
+any properties that have not been specified in the model.
 
 ```js
 let data = { beep: { boop: 'bla' }, bla: 100 }
