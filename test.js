@@ -123,14 +123,14 @@ test('the model function optional', assert => {
 })
 
 
-test('the model function optional', assert => {
+test('the model function required', assert => {
 
   let m = Model.create({
     'bar': v().string('bar must be a stirng'),
   })
 
   let r = m({ bla: 100, bar: 'hello' }, true)
-  console.log(r.data)
+  assert.equal(r.length, 0)
   assert.end()
 })
 

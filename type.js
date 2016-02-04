@@ -1,4 +1,4 @@
+const re = /\[object (\w+)\]/
 module.exports = (v) => {
-  return ({}).toString.call(v).match(/\[object (\w+)\]/)[1]
+  return ({}).toString.call(v).match(re)[1]
 }
-

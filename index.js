@@ -7,10 +7,6 @@ const type = require('./type')
 
 let Model = module.exports = function () {}
 
-function isUndefined (v) {
-  return typeof v === 'undefined'
-}
-
 function clean (data, model) {
   let output = {}
   for (let k in model) {
@@ -63,9 +59,9 @@ Model.create = function Model () {
       let m = model[key]
       let value = opath.get(data, key)
 
-      if (m.optional && isUndefined(value)) {
+      if (m.optional && type(value) === 'Undefined') {
         continue
-      } else if (isUndefined(value)) {
+      } else if (type(value) === 'Undefined') {
         errors[key] = (errors[key] || [])
         errors[key].push(required)
         continue
