@@ -3,7 +3,7 @@ Models backed by [`validimir`](https://github.com/juliangruber/validimir).
 Define, validate and sanitize without any DSLs or schema languages.
 
 # BUILD
-[![Build Status](https://travis-ci.org/voltraco/node-models.png)](https://travis-ci.org/voltraco/node-models)
+[![Build Status](https://travis-ci.org/voltraco/node-models.svg)](https://travis-ci.org/voltraco/node-models)
 
 # USAGE
 ```js
