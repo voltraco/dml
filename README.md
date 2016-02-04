@@ -22,10 +22,11 @@ if (result.length === 0) console.log('No errors!')
 else console.log(result.errors)
 ```
 
-### `Function` Models.create(`Object` obj)
+### `Function` Models.create(`Object` obj [, `Object` model, ...])
 `create(object)` accepts an object with 
 [`object paths`](https://github.com/mariocasciaro/object-path) for keys and
-`validation functions` for values, returns a `validator` function.
+`validation functions` for values, returns a `validator` function. It can
+also be extended with other models by passing them in as additional arguments.
 
 ```js
 let v = Models.create({
