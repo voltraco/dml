@@ -85,3 +85,7 @@ console.log(v(data))
   "length": 1 }
 ```
 
+# LICENSE
+
+[![License](https://img.shields.io/npm/l/array.from.svg)](/LICENSE)
+

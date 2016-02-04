@@ -2,6 +2,7 @@
 const validimir = require('validimir')
 const opath = require('object-path')
 const assert = require('assert')
+const xtend = require('xtend')
 const type = require('./type')
 
 let Model = module.exports = function () {}
@@ -40,8 +41,16 @@ Model.validators = function Validators (optional) {
   return engine
 }
 
-Model.create = function Model (model) {
-  return (data, sanitize) => {
+Model.create = function Model () {
+
+  let args = Array.from(arguments)
+  let model = args.shift()
+  
+  for (let m of args) {
+    model = xtend(model, m.model)
+  }
+
+  let fn = function fn (data, sanitize) {
 
     let errors = {}
 
@@ -70,5 +79,8 @@ Model.create = function Model (model) {
       data: sanitize ? clean(data, model) : data
     }
   }
+
+  fn.model = model
+  return fn
 }
 

@@ -114,7 +114,7 @@ test('the validator function validates objects with nested structures (fail)', a
 test('the model function optional', assert => {
 
   let m = Model.create({
-    'bar': v(true).string('Bar must be a stirng'),
+    'bar': v(true).string('bar must be a stirng'),
   })
 
   let r = m({ bla: 100 })
@@ -126,11 +126,43 @@ test('the model function optional', assert => {
 test('the model function optional', assert => {
 
   let m = Model.create({
-    'bar': v().string('Bar must be a stirng'),
+    'bar': v().string('bar must be a stirng'),
   })
 
   let r = m({ bla: 100, bar: 'hello' }, true)
   console.log(r.data)
+  assert.end()
+})
+
+test('extend a model with one or more models (failing)', assert => {
+
+  let m1 = Model.create({
+    'bar': v().string('bar must be a stirng')
+  })
+
+  let m2 = Model.create({
+    'bla': v().number('bla must be a number')
+  }, m1)
+
+  let r = m2({ bla: 'hello', bar: 100 })
+
+  assert.equal(r.length, 2)
+  assert.end()
+})
+
+test('extend a model with one or more models (passing)', assert => {
+
+  let m1 = Model.create({
+    'bar': v().string('bar must be a stirng')
+  })
+
+  let m2 = Model.create({
+    'bla': v().number('bla must be a number')
+  }, m1)
+
+  let r = m2({ bla: 100, bar: 'hello' })
+
+  assert.equal(r.length, 0)
   assert.end()
 })
 
