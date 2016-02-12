@@ -10,7 +10,7 @@ Define, validate and sanitize without any DSLs or schema languages.
 const Models = require('node-models')
 
 let v = Models.create({
-  'beep.boop': Models.validators().string('boop must be a stirng').len(5),
+  'beep.boop': Models.validators().string('boop must be a string').len(5),
   'foo.bar.bazz.quxx': Models.validators().number()
 })
 
