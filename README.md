@@ -52,7 +52,7 @@ Models.validators().len({ gt: 3, lte: 10 })('a')
 
 ### `Object` validate(`Object` object[, `Boolean` sanitize])
 The `validator` function only cares about property paths that are specified
-in the model, that way you can be libeal with data and strict about specific
+in the model, that way you can be liberal with data and strict about specific
 details. You can also pass a bool as the second parameter which will remove
 any properties that have not been specified in the model.
 
