@@ -24,12 +24,12 @@ function length (results) {
   return count 
 }
 
-let required = [{ 
+let required = { 
   value: 'undefined',
   operator: 'Boolean',
   actual: 'undefined',
   message: 'Value is required'
-}]
+}
 
 Model.validators = function Validators (optional) {
   let engine = validimir()
