@@ -88,5 +88,7 @@ console.log(v(data))
 
 # LICENSE
 
+https://voltra.co
+
 [![License](https://img.shields.io/npm/l/array.from.svg)](/LICENSE)
 
