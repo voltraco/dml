@@ -1,30 +1,30 @@
 'use strict'
-const validimir = require('validimir')
-const opath = require('object-path')
-const assert = require('assert')
-const xtend = require('xtend')
-const type = require('./type')
+var validimir = require('validimir')
+var opath = require('object-path')
+var assert = require('assert')
+var xtend = require('xtend')
+var type = require('./type')
 
-let Model = module.exports = function () {}
+var Model = module.exports = function () {}
 
 function clean (data, model) {
-  let output = {}
-  for (let k in model) {
-    let value = opath.get(data, k)
+  var output = {}
+  for (var k in model) {
+    var value = opath.get(data, k)
     opath.set(output, k, value)
   }
   return output
 }
 
 function length (results) {
-  let count = 0
-  for (let r in results) {
+  var count = 0
+  for (var r in results) {
     count += (results[r].length || 0)
   }
-  return count 
+  return count
 }
 
-let required = { 
+var required = {
   value: 'undefined',
   operator: 'Boolean',
   actual: 'undefined',
@@ -32,32 +32,30 @@ let required = {
 }
 
 Model.validators = function Validators (optional) {
-  let engine = validimir()
+  var engine = validimir()
   engine.optional = optional
   return engine
 }
 
 Model.create = function Model () {
+  var args = Array.from(arguments)
+  var model = args.shift()
 
-  let args = Array.from(arguments)
-  let model = args.shift()
-  
-  for (let m of args) {
+  for (var m of args) {
     model = xtend(model, m.model)
   }
 
-  let fn = function fn (data, sanitize) {
-
-    let errors = {}
+  var fn = function fn (data, sanitize) {
+    var errors = {}
 
     if (type(data) !== 'Object') {
       errors[''] = required
       return errors
     }
 
-    for (let key in model) {
-      let m = model[key]
-      let value = opath.get(data, key)
+    for (var key in model) {
+      var m = model[key]
+      var value = opath.get(data, key)
 
       if (m.optional && type(value) === 'Undefined') {
         continue
@@ -79,4 +77,3 @@ Model.create = function Model () {
   fn.model = model
   return fn
 }
-
