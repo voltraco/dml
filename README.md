@@ -14,7 +14,8 @@ let v = Models.create(fs.readFileSync('sample.model', 'utf8'))
 let result = v({
   id: 1337,
   created: new Date(),
-  name: 'Glen Danzig'
+  name: 'Glen Danzig',
+  countType: 'awesome'
 })
 ```
 
@@ -35,6 +36,27 @@ String name {
 
 String bio "A bio must be a string" {
   lt 140 "A bio must fit into a tweet"
+}
+
+Boolean accountType
+```
+
+### output
+
+```json
+{
+  data: {
+    id: 1337,
+    created: 2016-10-02T13:56:44.931Z,
+    name: 'Glen Danzig'
+  },
+  length: 0,
+  errors: {
+    accountType: [{
+      validator: 'type',
+      message: 'Expected type [Boolean] but got type [String]'
+    }]
+  }
 }
 ```
 
