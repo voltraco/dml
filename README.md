@@ -43,7 +43,7 @@ Boolean accountType
 
 ### output
 
-```json
+```js
 {
   data: {
     id: 1337,
