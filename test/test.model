@@ -1,0 +1,45 @@
+
+// @clean   /* only use data that has been defined in the model */
+
+
+Date created {
+  lte now
+}
+
+String buzz { required true }
+Boolean bazz
+
+/*
+ *
+ * Item with multiple properties 
+ *
+ */
+
+String name "a name is required" {
+  required true
+  match /^foo/ /* matching on a regular expression */
+  lt "a"
+  gt 2 "greater than 2" // a length greater than 2
+}  
+
+Number foo {
+  equal 20
+}
+
+Number xxx {
+  required true
+  gt 10 
+  }
+
+Number string {
+  equal "number"
+}
+
+String cheese {
+  gte 2
+  required true
+}
+
+Boolean bla.foo
+String bla.bar
+
