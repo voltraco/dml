@@ -47,10 +47,10 @@ Boolean accountType
 {
   data: {
     id: 1337,
-    created: 2016-10-02T13:56:44.931Z,
+    created: '2016-10-02T13:56:44.931Z',
     name: 'Glen Danzig'
   },
-  length: 0,
+  length: 1,
   errors: {
     accountType: [{
       validator: 'type',
