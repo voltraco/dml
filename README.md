@@ -1,5 +1,5 @@
 # SYNOPSIS
-Data models! Easy to read, easy to maintain.
+Data models! Easy to read, compose and maintain.
 
 # BUILD
 [![Build Status](https://travis-ci.org/voltraco/node-models.svg)](https://travis-ci.org/voltraco/node-models)
@@ -7,7 +7,7 @@ Data models! Easy to read, easy to maintain.
 # USAGE
 
 ### sample.model
-Define a model
+Define a model using the modeling syntax
 
 ```js
 /*
@@ -24,14 +24,14 @@ String name {
 }
 
 String bio "A bio must be a string" {
-  lt 140 "A bio must fit into a tweet"
+  lte 140 "A bio must fit into a tweet"
 }
 
 Boolean accountType
 ```
 
 ### index.js
-Create a model instance to pass data to
+Create a model instance to pass data into
 
 ```js
 const Models = require('node-models')
@@ -46,7 +46,9 @@ let result = v({
 ```
 
 ### output
-The result is the data and a length of resulting errors
+
+After compiling the model and passing data into it, the result is
+the data and a length of resulting errors.
 
 ```js
 {
