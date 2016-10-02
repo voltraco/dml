@@ -6,20 +6,9 @@ Data models! Easy to read, easy to maintain.
 
 # USAGE
 
-### index.js
-```js
-const Models = require('node-models')
-
-let v = Models.create(fs.readFileSync('sample.model', 'utf8'))
-let result = v({
-  id: 1337,
-  created: new Date(),
-  name: 'Glen Danzig',
-  countType: 'awesome'
-})
-```
-
 ### sample.model
+Define a model
+
 ```js
 /*
  * An example data model
@@ -41,7 +30,23 @@ String bio "A bio must be a string" {
 Boolean accountType
 ```
 
+### index.js
+Create a model instance to pass data to
+
+```js
+const Models = require('node-models')
+
+let v = Models.create(fs.readFileSync('sample.model', 'utf8'))
+let result = v({
+  id: 1337,
+  created: new Date(),
+  name: 'Glen Danzig',
+  accountType: 'awesome'
+})
+```
+
 ### output
+The result is the data and a length of resulting errors
 
 ```js
 {
