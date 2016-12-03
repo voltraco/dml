@@ -1,7 +1,7 @@
 {
   "name": "node-models",
-  "version": "2.1.5",
-  "description": "A minimalist models module backed by validimir",
+  "version": "3.0.0",
+  "description": "data model language",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"

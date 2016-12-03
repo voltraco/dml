@@ -11,7 +11,7 @@ Boolean bazz
 
 /*
  *
- * Item with multiple properties 
+ * Item with multiple properties
  *
  */
 
@@ -20,7 +20,7 @@ String name "a name is required" {
   match /^foo/ /* matching on a regular expression */
   lt "a"
   gt 2 "greater than 2" // a length greater than 2
-}  
+}
 
 Number foo {
   equal 20
@@ -28,7 +28,7 @@ Number foo {
 
 Number xxx {
   required true
-  gt 10 
+  gt 10
   }
 
 Number string {

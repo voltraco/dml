@@ -31,24 +31,28 @@ Boolean accountType
 ```
 
 ### index.js
-Create a model instance to pass data into
+Create an instance of the model then pass data into it one or more times.
 
 ```js
 const Models = require('node-models')
 
-let v = Models.create(fs.readFileSync('sample.model', 'utf8'))
-let result = v({
+let model = Models.compile(fs.readFileSync('sample.model', 'utf8'))
+
+let result = model({
   id: 1337,
   created: new Date(),
   name: 'Glen Danzig',
   accountType: 'awesome'
 })
+
+console.log(result.data)
 ```
 
 ### output
 
-After compiling the model and passing data into it, the result is
-the data and a length of resulting errors.
+The result will be an object that contains the final data, as well as a
+`length` property which indicates how many rules were violated, and a rules
+property containing information about the rules that were violated.
 
 ```js
 {
@@ -58,7 +62,7 @@ the data and a length of resulting errors.
     name: 'Glen Danzig'
   },
   length: 1,
-  errors: {
+  rules: {
     accountType: [{
       validator: 'type',
       message: 'Expected type [Boolean] but got type [String]'

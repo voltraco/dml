@@ -185,7 +185,7 @@ Model.compile = function Compile () {
     var result = {
       data: data,
       length: 0,
-      errors: {}
+      rules: {}
     }
 
     if (directives.indexOf('clean') > -1) {
@@ -223,8 +223,8 @@ Model.compile = function Compile () {
 
         if (error) {
           result.length++
-          result.errors[identifier] = result.errors[identifier] || []
-          result.errors[identifier].push({
+          result.rules[identifier] = result.rules[identifier] || []
+          result.rules[identifier].push({
             validator: validator.name,
             message: error
           })
