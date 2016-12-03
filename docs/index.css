@@ -1,34 +1,44 @@
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
 
 body {
-  padding: 50px 10%;
   font-size: 1em;
+  margin: 0;
+
   background-color: #f4f4f4;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 
 /* Icon used from https://thenounproject.com/josydomalexis/ */
 .icon {
   display: inline-block;
-  background-image: url('/icon.svg');
+  background-image: url('/icon.svg?v=2');
   background-size: contain;
-  width: 38px;
-  height: 38px;
-  margin: 12px;
+  width: 45px;
+  height: 45px;
+  margin: 8px;
   vertical-align: text-top;
 }
 
 header {
   padding-bottom: 30px;
+  background: white;
+  padding: 100px 15%;
 }
 
 h1, h2, h3, h4 {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-}
-
-h2, h3, h4 {
-  margin-top: 0px;
-  font-weight: 400;
 }
 
 h1 {
@@ -38,12 +48,34 @@ h1 {
 }
 
 h2 {
-  text-transform: uppercase;
   font-size: 1.2em;
+  margin: 0;
   letter-spacing: .05em;
+  font-weight: 400;
+}
+
+h3 {
+  text-transform: uppercase;
+  margin-top: 50px;
+  font-weight: 400;
+}
+
+section[role="main"] {
+  max-width: 600px;
+  margin: 50px 15%;
+}
+
+h4 {
+  background: #eaeaea;
+  padding: 8px;
+  color: #999;
+  font-size: .7em;
+  font-weight: 400;
+  margin: 0;
 }
 
 pre {
+  margin-top: 0px;
   font-family: 'Source Code Pro', monospace;
   padding: 16px;
   overflow: auto;
@@ -51,7 +83,6 @@ pre {
   line-height: 1.45;
   background-color: #fbfbfb;
   border-radius: 3px;
-  max-width: 600px;
 }
 
 .pl-c {

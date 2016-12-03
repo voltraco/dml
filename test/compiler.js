@@ -260,3 +260,16 @@ test('Type [Date], Multiple Rules, No Validators (Failing)', function (assert) {
   assert.equal(r1.length, 0)
   assert.end()
 })
+
+test('Type [Date], Message, Single Rule, No Validators (Failing)', function (assert) {
+  var m1 = Model.compile(`
+    Date created "A valid date is required"
+  `)
+
+  var r1 = m1({
+    created: 'wtf'
+  })
+
+  assert.equal(r1.rules.created[0].message, 'A valid date is required')
+  assert.end()
+})
