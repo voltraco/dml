@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Source+Code+Pro|Source+Sans+Pro" rel="stylesheet">
+    <link href="/index.css?v=1" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <h1>
+        <span class="icon">&nbsp;</span>Node Models
+      </h1>
+      <h4>A language for modeling data, works in <b>nodejs</b> and the <b>browser</b>.</h4>
+    </header>
+    <section role="main">
+      <h2>Example Data Model</h2>
+
+        <pre>
+<span class="pl-c">/*</span>
+<span class="pl-c"> * An example data model</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c1">Date</span> created
+<span class="pl-c1">Number</span> id
+
+<span class="pl-c1">String</span> name {
+  required <span class="pl-c1">true</span> <span class="pl-c">// this is a comment</span>
+  gt <span class="pl-n">2</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than 2 characters<span class="pl-pds">"</span></span>
+  lte <span class="pl-n">256</span> <span class="pl-s"><span class="pl-pds">"</span>Must be less than or equal to 256 characters<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c1">String</span> bio <span class="pl-s"><span class="pl-pds">"</span>A bio must be a string<span class="pl-pds">"</span></span> {
+  lte <span class="pl-n">140</span> <span class="pl-s"><span class="pl-pds">"</span>A bio must fit into a tweet<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c1">Boolean</span> accountType
+        </pre>
+
+
+    </section>
+  </body>
+</html>
