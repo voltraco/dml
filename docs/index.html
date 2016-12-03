@@ -11,8 +11,43 @@
       <h4>A language for modeling data, works in <b>nodejs</b> and the <b>browser</b>.</h4>
     </header>
     <section role="main">
-      <h2>Example Data Model</h2>
 
+      <h2>Models</h2>
+      Every model consists of one or more rules.
+
+      <h3>Rules</h3>
+      Every rule in a model is defined by at least a <b>type</b> and a
+      <b>path</b>. The type describes what kind of data is expected and the
+      path describes where to find it. For example, given the following data
+      and model.
+
+      <h4>Data</h4>
+      <pre>
+{
+  created: 1480801018654,
+  user: {
+    name: 'Glen Danzig'
+  }
+}
+      </pre>
+      <h4>Model</h4>
+      <pre>
+<span class="pl-c1">Date</span> created
+<span class="pl-c1">String</span> user.name
+      </pre>
+
+      <h3>Validators</h3>
+      In addition to a type, a rule can have one or more validators. A
+      validator is a function (it is possible to create custom validators).
+
+      <h4>Model</h4>
+      <pre>
+<span class="pl-c1">String</span> user.name {
+  required <span class="pl-c1">true</span>
+}
+      </pre>
+
+      <h3>Comments</h3>
         <pre>
 <span class="pl-c">/*</span>
 <span class="pl-c"> * An example data model</span>
@@ -33,6 +68,9 @@
 
 <span class="pl-c1">Boolean</span> accountType
         </pre>
+
+
+
 
 
     </section>
