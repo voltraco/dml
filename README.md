@@ -1,5 +1,5 @@
 # SYNOPSIS
-Data models! Easy to read, compose and maintain.
+A simple data modeling language! Easy to read, compose and maintain.
 
 # BUILD
 [![Build Status](https://travis-ci.org/voltraco/node-models.svg)](https://travis-ci.org/voltraco/node-models)
@@ -7,18 +7,18 @@ Data models! Easy to read, compose and maintain.
 # USAGE
 
 ### sample.model
-Define a model using the modeling syntax
+Define a model using the data modeling language syntax
 
 ```js
 /*
  * An example data model
  */
 
-Number id
 Date created
+Number id
 
 String name {
-  required true // this is required
+  required true // this is a comment
   gt 2 "Must be greater than 2 characters"
   lte 256 "Must be less than or equal to 256 characters"
 }
@@ -44,8 +44,6 @@ let result = model({
   name: 'Glen Danzig',
   accountType: 'awesome'
 })
-
-console.log(result.data)
 ```
 
 ### output
@@ -59,7 +57,8 @@ property containing information about the rules that were violated.
   data: {
     id: 1337,
     created: '2016-10-02T13:56:44.931Z',
-    name: 'Glen Danzig'
+    name: 'Glen Danzig',
+    accountType: 'awesome'
   },
   length: 1,
   rules: {
