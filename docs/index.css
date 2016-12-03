@@ -22,7 +22,7 @@ body {
 /* Icon used from https://thenounproject.com/josydomalexis/ */
 .icon {
   display: inline-block;
-  background-image: url('/icon.svg?v=2');
+  background-image: url('/node-models/icon.svg?v=2');
   background-size: contain;
   width: 45px;
   height: 45px;
