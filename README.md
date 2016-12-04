@@ -2,7 +2,7 @@
 A simple data modeling language! Easy to read, compose and maintain.
 
 # BUILD
-[![Build Status](https://travis-ci.org/voltraco/node-dml.svg)](https://travis-ci.org/voltraco/node-dml)
+[![Build Status](https://travis-ci.org/voltraco/dml.svg)](https://travis-ci.org/voltraco/dml)
 
 # USAGE
 
