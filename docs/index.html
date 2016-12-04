@@ -53,6 +53,12 @@
   gt <span class="pl-n">2</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than 2 characters<span class="pl-pds">"</span></span>
   lte <span class="pl-n">256</span> <span class="pl-s"><span class="pl-pds">"</span>Must be less than or equal to 256 characters<span class="pl-pds">"</span></span>
 }</pre>
+      <p>Built-in validators handle relative and absolute dates.</p>
+      <pre>
+<span class="pl-c1">Date</span> birthday {
+  gt <span class="pl-n">+1week</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than one week forom now<span class="pl-pds">"</span></span>
+}</pre>
+
       <p>Rules that have validators can also have a default error <b>message</b>.</p>
       <pre>
 <span class="pl-c1">String</span> user.name <span class="pl-s"><span class="pl-pds">"</span>Must be a valid name<span class="pl-pds">"</span></span> {
@@ -99,6 +105,7 @@
 }</pre>
       <h4>example.model</h4>
       <pre>
+<span class="pl-n">@clean</span>
 <span class="pl-c1" title="Type">Date</span> <span title="Path">created</span>
 <span class="pl-c1" title="Type">String</span> <span title="Path">user.name</span></pre>
       <p>Given the above data and model, the result will not include the
