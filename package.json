@@ -1,6 +1,6 @@
 {
-  "name": "node-models",
-  "version": "3.0.0",
+  "name": "node-dml",
+  "version": "1.0.0",
   "description": "data model language",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/voltraco/node-models.git"
+    "url": "git+https://github.com/voltraco/node-dml.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/voltraco/node-models/issues"
+    "url": "https://github.com/voltraco/node-dml/issues"
   },
-  "homepage": "https://github.com/voltraco/node-models#readme",
+  "homepage": "https://github.com/voltraco/node-dml#readme",
   "dependencies": {
     "object-path": "^0.9.2",
     "validimir": "^1.5.0",

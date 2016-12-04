@@ -2,7 +2,7 @@
 A simple data modeling language! Easy to read, compose and maintain.
 
 # BUILD
-[![Build Status](https://travis-ci.org/voltraco/node-models.svg)](https://travis-ci.org/voltraco/node-models)
+[![Build Status](https://travis-ci.org/voltraco/node-dml.svg)](https://travis-ci.org/voltraco/node-dml)
 
 # USAGE
 
@@ -34,7 +34,7 @@ Boolean accountType
 Create an instance of the model then pass data into it one or more times.
 
 ```js
-const Models = require('node-models')
+const Models = require('node-dml')
 
 let model = Models.compile(fs.readFileSync('sample.model', 'utf8'))
 
