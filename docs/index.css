@@ -30,6 +30,11 @@ body {
   vertical-align: text-top;
 }
 
+a {
+  font-size: 1em;
+  color: #999;
+}
+
 header {
   padding-bottom: 30px;
   background: white;
