@@ -1,5 +1,5 @@
 # SYNOPSIS
-A simple data modeling language! Easy to read, compose and maintain.
+A data modeling language reference implementation. See [dml.sh](http://dml.sh)
 
 # BUILD
 [![Build Status](https://travis-ci.org/voltraco/dml.svg)](https://travis-ci.org/voltraco/dml)

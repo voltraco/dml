@@ -1,7 +1,7 @@
 <html>
   <head>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Source+Code+Pro|Source+Sans+Pro" rel="stylesheet">
-    <link href="/dml/index.css?v=1" rel="stylesheet">
+    <link href="/index.css?v=1" rel="stylesheet">
   </head>
   <body>
     <header>
@@ -41,10 +41,12 @@
 <span class="pl-c1" title="Type">Date</span> <span title="Path">created</span> <span class="pl-s"><span class="pl-pds">"</span>Must be a valid date<span class="pl-pds">"</span></span></pre>
       <h3>Validators</h3>
       <p>
-        In addition to a type, a rule can have one or more validators. A
+        In addition to a type, a rule can have zero or more validators. A
         validator is a function (it is possible to create custom validators).
-        A validator has two or more parts &mdash; a function <b>name</b>, a
-        <b>value</b>, and an optional error <b>message</b>.
+        Validators are declared inside curly braeces immediately following the
+        type and path. A validator has two or more parts &mdash; a function
+        <b>name</b>, a <b>value</b>, and an optional error <b>message</b>. The
+        data must satify all of the criteria defined by the validators.
       </p>
       <h4>example.model</h4>
       <pre>
@@ -53,18 +55,16 @@
   gt <span class="pl-n">2</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than 2 characters<span class="pl-pds">"</span></span>
   lte <span class="pl-n">256</span> <span class="pl-s"><span class="pl-pds">"</span>Must be less than or equal to 256 characters<span class="pl-pds">"</span></span>
 }</pre>
-      <p>Built-in validators handle relative and absolute dates.</p>
-      <pre>
-<span class="pl-c1">Date</span> birthday {
-  gt <span class="pl-n">+1week</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than one week forom now<span class="pl-pds">"</span></span>
-}</pre>
-
       <p>Rules that have validators can also have a default error <b>message</b>.</p>
       <pre>
 <span class="pl-c1">String</span> user.name <span class="pl-s"><span class="pl-pds">"</span>Must be a valid name<span class="pl-pds">"</span></span> {
   required <span class="pl-c1">true</span>
 }</pre>
-
+      <p>Built-in validators can also handle relative and absolute dates.</p>
+      <pre>
+<span class="pl-c1">Date</span> birthday {
+  gt <span class="pl-n">+1week</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than one week forom now<span class="pl-pds">"</span></span>
+}</pre>
 
       <h3>Comments</h3>
       <p>Both inline and block comments are supported. They work the way you
