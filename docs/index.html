@@ -16,7 +16,7 @@
       <br>
       <h3>Models</h3>
       <p>
-        Every model consists of one or more rules (see
+        Every model consists of one or more declarative rules (see
         <a href="https://github.com/voltraco/dml">this project</a> for a
         nodejs reference implementation that also works in the browser).
       </p>
@@ -46,10 +46,10 @@
       <p>
         In addition to a type, a rule can have zero or more validators. A
         validator is a function (it is possible to create custom validators).
-        Validators are declared inside curly braeces immediately following the
+        Validators are declared inside curly braces immediately following the
         type and path. A validator has two or more parts &mdash; a function
         <b>name</b>, a <b>value</b>, and an optional error <b>message</b>. The
-        data must satify all of the criteria defined by the validators.
+        data must satisfy criteria defined by the rule's validators.
       </p>
       <h4>example.model</h4>
       <pre>
