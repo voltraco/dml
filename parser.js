@@ -78,6 +78,7 @@ module.exports = function Parser (str) {
       lexer.match.whitespace()
 
       var value = lexer.match.word()
+      lexer.match.whitespace()
 
       if (!value) value = lexer.match.string()
       if (!value) value = lexer.match.regex()
@@ -89,6 +90,10 @@ module.exports = function Parser (str) {
 
       if (name === 'required') {
         rule.required = true
+      }
+
+      if (name === 'optional') {
+        rule.optional = true
       }
 
       rule.validators.push({

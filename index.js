@@ -120,8 +120,10 @@ Model.validators.match = function match (rule, validator, _, value) {
   var expected = validator.value
 
   if (!new RegExp(expected).exec(value)) {
-    return fmt('The regular expression [%s] does not match the value [%s]',
+    var msg = fmt(
+      'The regular expression [%s] does not match the value [%s]',
       expected, value)
+    return (validator.message || msg)
   }
 }
 

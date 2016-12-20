@@ -1,20 +1,20 @@
-var test = require('tape')
-var Model = require('../index')
-var util = require('util')
-var now = require('../now')
+const test = require('tape')
+const Model = require('../index')
+const util = require('util')
+const now = require('../now')
 
-var config = { colors: true, depth: null }
+const config = { colors: true, depth: null }
 
-var log = function (o) {
+const log = function (o) {
   console.log(util.inspect(o, config))
 }
 
-test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created
   `)
 
-  var result = m1({
+  const result = m1({
     created: Date.now()
   })
 
@@ -22,12 +22,12 @@ test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Pas
   assert.end()
 })
 
-test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created
   `)
 
-  var result = m1({
+  const result = m1({
     created: "It's Always Sunny"
   })
 
@@ -38,12 +38,12 @@ test('Type [Date], Single Rule, No Custom Message, No Validators, No Braces (Fai
   assert.end()
 })
 
-test('Type [Date], Single Rule, No Validators, Custom Message (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Validators, Custom Message (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created "Must contain a valid date"
   `)
 
-  var result = m1({
+  const result = m1({
     created: Date.now()
   })
 
@@ -51,12 +51,12 @@ test('Type [Date], Single Rule, No Validators, Custom Message (Passing)', functi
   assert.end()
 })
 
-test('Type [Date], Single Rule, No Validators, Custom Message (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Validators, Custom Message (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created "Must contain a valid date"
   `)
 
-  var result = m1({
+  const result = m1({
     created: "It's Always Sunny"
   })
 
@@ -67,12 +67,12 @@ test('Type [Date], Single Rule, No Validators, Custom Message (Failing)', functi
   assert.end()
 })
 
-test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created "Must contain a valid date" {}
   `)
 
-  var result = m1({
+  const result = m1({
     created: Date.now()
   })
 
@@ -80,12 +80,12 @@ test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Pas
   assert.end()
 })
 
-test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created 'Must contain a valid date' {}
   `)
 
-  var result = m1({
+  const result = m1({
     created: "It's Always Sunny"
   })
 
@@ -96,26 +96,26 @@ test('Type [Date], Single Rule, Custom Message, No Validators, Empty braces (Fai
   assert.end()
 })
 
-test('Type [Date], Single Rule, Single validator with and without custom message, braces, single validator (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, Single validator with and without custom message, braces, single validator (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created "Must contain a valid date" {
       required true "A date is required"
     }
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: Date.now()
   })
 
   assert.equal(r1.length, 0)
 
-  var m2 = Model.compile(`
+  const m2 = Model.compile(`
     Date created "Must contain a valid date" {
       required true
     }
   `)
 
-  var r2 = m2({
+  const r2 = m2({
     created: Date.now()
   })
 
@@ -124,14 +124,14 @@ test('Type [Date], Single Rule, Single validator with and without custom message
   assert.end()
 })
 
-test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, Custom Message', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, Custom Message', assert => {
+  const m1 = Model.compile(`
     Date created 'Must contain a valid date' {
       required true "A date is required"
     }
   `)
 
-  var r1 = m1({
+  const r1 = m1({
   })
 
   assert.equal(r1.length, 2, 'There must be two errors total')
@@ -141,13 +141,13 @@ test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, C
   assert.equal(r1.rules['created'][0].message, 'Must contain a valid date', 'a custom type message')
   assert.equal(r1.rules['created'][1].message, 'A date is required', 'a custom requirement message')
 
-  var m2 = Model.compile(`
+  const m2 = Model.compile(`
     Date created {
       required true
     }
   `)
 
-  var r2 = m2({
+  const r2 = m2({
   })
 
   assert.equal(r2.length, 2, 'There must be two errors total')
@@ -160,15 +160,15 @@ test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, C
   assert.end()
 })
 
-test('Type [Date], Single Rule, Custom Mesage, Multiple Validators, Braces (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, Custom Mesage, Multiple Validators, Braces (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created {
       gte now
       required true
     }
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('+1h')
   })
 
@@ -176,15 +176,15 @@ test('Type [Date], Single Rule, Custom Mesage, Multiple Validators, Braces (Pass
   assert.end()
 })
 
-test('Type [Date], Single Rule, No Message, Multiple Validators, Braces (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Message, Multiple Validators, Braces (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created {
       gte now
       required true
     }
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('-1h')
   })
 
@@ -192,15 +192,15 @@ test('Type [Date], Single Rule, No Message, Multiple Validators, Braces (Failing
   assert.end()
 })
 
-test('Type [Date], Single Rule, No Message, Multiple Validators, No Messages (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Single Rule, No Message, Multiple Validators, No Messages (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created {
       gte now
       required true
     }
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('-1h')
   })
 
@@ -208,8 +208,8 @@ test('Type [Date], Single Rule, No Message, Multiple Validators, No Messages (Fa
   assert.end()
 })
 
-test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Passing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Passing)', assert => {
+  const m1 = Model.compile(`
     Date created {
       gte now
       required true
@@ -217,7 +217,7 @@ test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Passing
     String name
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('+1h'),
     name: 'Beep Boop'
   })
@@ -226,8 +226,8 @@ test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Passing
   assert.end()
 })
 
-test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created {
       gte now
       required true
@@ -235,7 +235,7 @@ test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Failing
     String name
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('+1h'),
     name: 100
   })
@@ -244,14 +244,14 @@ test('Type [Date], Multiple Rules, Multiple Validators, Custom messages (Failing
   assert.end()
 })
 
-test('Type [Date], Multiple Rules, No Validators (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Multiple Rules, No Validators (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created
     String name
     Number id
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: now('+1h'),
     name: 'Beep Boop',
     id: 100
@@ -261,15 +261,51 @@ test('Type [Date], Multiple Rules, No Validators (Failing)', function (assert) {
   assert.end()
 })
 
-test('Type [Date], Message, Single Rule, No Validators (Failing)', function (assert) {
-  var m1 = Model.compile(`
+test('Type [Date], Message, Single Rule, No Validators (Failing)', assert => {
+  const m1 = Model.compile(`
     Date created "A valid date is required"
   `)
 
-  var r1 = m1({
+  const r1 = m1({
     created: 'wtf'
   })
 
   assert.equal(r1.rules.created[0].message, 'A valid date is required')
   assert.end()
 })
+
+test('Type [String], perform a match on the value (Passing)', assert => {
+  const m1 = Model.compile(`
+    String foo {
+      match /bar/
+    }
+  `)
+
+  const result = m1({ foo: 'bar' })
+  assert.equal(result.length, 0)
+  assert.end()
+})
+
+test('Type [String], perform a match on the value (Failing)', assert => {
+  const m1 = Model.compile(`
+    String foo {
+      match /bazz/ 'Not a match'
+    }
+  `)
+
+  const result = m1({ foo: 'bar' })
+  assert.equal(result.length, 1)
+  assert.equal(result.rules.foo[0].message, 'Not a match')
+  assert.end()
+})
+
+test('Start a file with a comment', assert => {
+  const m1 = Model.compile(`// This is a comment
+    String foo
+  `)
+
+  const result = m1({ foo: 'bar' })
+  assert.equal(result.length, 0)
+  assert.end()
+})
+

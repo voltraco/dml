@@ -1,4 +1,4 @@
-var QUOTED_RE = /^"|'/
+var QUOTED_RE = /^["|']/
 var OPEN_RE = /^{\s*/
 var CLOSE_RE = /^}/
 var WORD_RE = /^([-|+]?\w+)/
@@ -30,9 +30,9 @@ module.exports = function Lexer (str, options) {
 
   function matcher (re) {
     var m = re.exec(lexer.source)
-    // console.log('>', arguments.callee.caller.name, "'" + m + "'")
     if (m === null) return
     var str = m[0]
+    //console.log('>', arguments.callee.caller.name, "'" + str + "'")
     updatePosition(str)
     lexer.source = lexer.source.slice(m.index + str.length)
     return m
@@ -155,31 +155,24 @@ module.exports = function Lexer (str, options) {
   }
 
   pm.regex = function regex () {
-    var ch = lexer.peek(0, 1)
-    var next = lexer.peek(1, 2)
-    var value = ''
+    const pair = lexer.peek(0, 2)
+    if (pair[0] !== '/' || pair === '//') return
 
-    if (ch === '/' && next !== '/') {
-      lexer.pop()
+    let lastch = ''
+    let value = ''
+    lexer.pop()
 
-      while (true) {
-        if (lexer.length() === 0) {
-          lexer.error('missing end of regular expression')
-        }
-
-        var prev = ch
-        value += ch = lexer.pop()
-        next = lexer.source[0]
-
-        if (prev !== '\\' &&
-          ch === '/' &&
-          (next === ' ' || next === '\n')) {
-          updatePosition(value)
-          return value.slice(0, -1)
-        }
+    while (true) {
+      if (lexer.length() === 0) {
+        lexer.error('missing end of regular expression')
       }
+
+      const ch = lexer.pop()
+      if (ch === '/' && lastch !== '\\') break
+      value += lastch = ch
     }
-    return
+    updatePosition(value)
+    return value
   }
 
   pm.word = function word () {
