@@ -58,7 +58,7 @@ function stringExpression (validator, value) {
   if (!r) return msg
 }
 
-function exp (rule, validator, directives, value) {
+function exp (rule, validator, model, value) {
   if (rule.type === 'Date') return dateExpression(validator, value)
   else if (rule.type === 'Number') return numberExpression(validator, value)
   else if (rule.type === 'String') return stringExpression(validator, value)
@@ -72,9 +72,13 @@ function exp (rule, validator, directives, value) {
 //
 Model.validators = {}
 
-Model.validators.type = function (rule, validator, directives, value) {
+Model.validators.type = function (rule, validator, model, value) {
   var originalValue = value
   var expected = validator.value
+
+  if (model.types && model.types[rule.type]) {
+    expected = model.types[rule.type]
+  }
 
   if (expected === 'Number') {
     value = parseInt(value, 10)
@@ -132,11 +136,11 @@ Model.validators.lte = function lte () { return exp.apply(null, arguments) }
 Model.validators.gt = function gt () { return exp.apply(null, arguments) }
 Model.validators.gte = function gte () { return exp.apply(null, arguments) }
 
-Model.validators.equal = function equal (rule, validator, directives, value) {
+Model.validators.equal = function equal (rule, validator, model, value) {
   var Type = global[rule.type]
 
   if (!Type) {
-    return fmt('Could not find a type of [%s] to instantiate', Type)
+    return fmt('Could not find a type of [%s] to test with', Type)
   }
 
   var expected = new Type(validator.value)
@@ -182,7 +186,6 @@ Model.compile = function Compile () {
   // console.log(require('util').inspect(model, { colors: true, depth: null }))
   return function (data) {
     var rules = model.rules
-    var directives = model.directives
 
     var result = {
       data: data,
@@ -190,18 +193,19 @@ Model.compile = function Compile () {
       rules: {}
     }
 
-    if (directives.indexOf('clean') > -1) {
-      data = clean(data, rules)
-    }
+    // cleans all the data
+    if (model.directives.indexOf('clean') > -1) data = clean(data, rules)
+    // means all items are optional
+    var optional = model.directives.indexOf('optional') > -1
+    // means all items are required
+    var required = model.directives.indexOf('required') > -1
 
-    if (directives.indexOf('strict') > -1) {
-      /* unknown(data, rules).map(function (identifier) {
-        errors[identifier].push({
-          directive: 'strict',
-          message: fmt('[%s], is not defined in the model', identifier)
-        })
-      }) */
-    }
+    /* unknown(data, rules).map(function (identifier) {
+      errors[identifier].push({
+        directive: 'strict',
+        message: fmt('[%s], is not defined in the model', identifier)
+      })
+    }) */
 
     for (var identifier in rules) {
       var rule = rules[identifier]
@@ -211,17 +215,13 @@ Model.compile = function Compile () {
         var fn = Model.validators[validator.name]
 
         if (!fn) {
-          return error([
-            'A rule (', rule, ') ',
-            'used a validator (', validator.name, ') ',
-            'that was not defined'
-          ].join(''),
-          rule)
+          var msg = 'Rule [%s] has no validator named [%s].'
+          return error(fmt(msg, rule, validator.name), rule)
         }
 
         if (!rule.required && checkType(value) === 'Undefined') return
 
-        var error = fn(rule, validator, directives, value)
+        var error = fn(rule, validator, model, value)
 
         if (error) {
           result.length++

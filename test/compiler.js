@@ -309,3 +309,22 @@ test('Start a file with a comment', assert => {
   assert.end()
 })
 
+/* test('Custom type', assert => {
+  const m1 = Model.compile(`
+    def Name {
+      type String
+      gt 2
+      lte 256
+    }
+
+    Name username {
+      lte 15
+    }
+  `)
+
+  const result = m1({ username: 'danzig' })
+  log(result.rules)
+  assert.equal(result.length, 0)
+  assert.end()
+})
+*/

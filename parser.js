@@ -47,11 +47,19 @@ module.exports = function Parser (str) {
       message = lexer.match.string()
     }
 
-    var rule = tree.rules[identifier[0]] = {
+    var container = tree.rules
+    var ruleName = identifier[0]
+
+    if (type === 'def') {
+      container = tree.types || (tree.types = {})
+      type = ruleName
+    }
+
+    var rule = container[ruleName] = {
       message: message,
       pos: lexer.pos(),
       type: type,
-      rule: identifier[0],
+      rule: ruleName,
       required: false,
       validators: [{
         name: 'type',
