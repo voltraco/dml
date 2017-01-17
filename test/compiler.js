@@ -286,6 +286,18 @@ test('Type [String], perform a match on the value (Passing)', assert => {
   assert.end()
 })
 
+test('Type [String], perform a match on the value, alias (Passing)', assert => {
+  const m1 = Model.compile(`
+    String foo {
+      regexp /bar/
+    }
+  `)
+
+  const result = m1({ foo: 'bar' })
+  assert.equal(result.length, 0)
+  assert.end()
+})
+
 test('Type [String], perform a match on the value (Failing)', assert => {
   const m1 = Model.compile(`
     String foo {

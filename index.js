@@ -120,6 +120,8 @@ Model.validators.required = function required (rule, validator, _, value) {
   }
 }
 
+Model.validators.regexp =
+Model.validators.regExp =
 Model.validators.match = function match (rule, validator, _, value) {
   var expected = validator.value
 

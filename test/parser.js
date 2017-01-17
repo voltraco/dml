@@ -130,3 +130,4 @@ test('tree should contain a rules object with one rule (with validators)', asser
 
   assert0.end()
 })
+
