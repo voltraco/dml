@@ -1,8 +1,8 @@
 var opath = require('object-path')
+var date = require('date-at')
 var parse = require('./parser')
 var fmt = require('util').format
 var checkType = require('./type')
-var now = require('./now')
 
 var Model = module.exports = {}
 
@@ -28,7 +28,7 @@ function dateExpression (validator, value) {
   var msg = validator.message || fmt('[%s] was not [%s] now',
     value, validator.name)
   var a = value
-  var b = now(validator.value)
+  var b = date(validator.value)
   var r = compare(validator.name, a, b)
   if (!r) return msg
 }
@@ -76,8 +76,19 @@ Model.validators.type = function (rule, validator, model, value) {
   var originalValue = value
   var expected = validator.value
 
+  // merge in custom type validators
   if (model.types && model.types[rule.type]) {
-    expected = model.types[rule.type]
+    var customType = model.types[rule.type]
+
+    rule.validators = rule.validators
+      .filter(v => v.name !== 'type')
+      .concat(customType.validators)
+
+    rule.validators.map(v => {
+      if (v.name === 'type') {
+        expected = rule.type = v.value
+      }
+    })
   }
 
   if (expected === 'Number') {
@@ -164,11 +175,12 @@ Model.compile = function Compile () {
     return typeof model === 'string' ? parse(model) : model
   })
 
-  var model = { directives: [], rules: {} }
+  var model = { directives: [], rules: {}, types: {} }
 
   models.map(function (m) { // combine all models
     model.directives = m.directives // last one in wins, like css
     for (var key in m.rules) model.rules[key] = m.rules[key]
+    for (var type in m.types) model.types[type] = m.types[type]
   })
 
   function error (msg, rule) {
@@ -185,7 +197,6 @@ Model.compile = function Compile () {
     throw err
   }
 
-  // console.log(require('util').inspect(model, { colors: true, depth: null }))
   return function (data) {
     var rules = model.rules
 
@@ -202,16 +213,29 @@ Model.compile = function Compile () {
     // means all items are required
     var required = model.directives.indexOf('required') > -1
 
-    /* unknown(data, rules).map(function (identifier) {
-      errors[identifier].push({
-        directive: 'strict',
-        message: fmt('[%s], is not defined in the model', identifier)
+    function addViolation (identifier, name, message) {
+      result.length++
+      result.rules[identifier] = result.rules[identifier] || []
+      result.rules[identifier].push({
+        validator: name,
+        message: message
       })
-    }) */
+    }
 
     for (var identifier in rules) {
       var rule = rules[identifier]
       var value = opath.get(data, identifier)
+      var noValue = checkType(value) === 'Undefined'
+
+      if (!rule.required && noValue) continue
+
+      if (noValue) {
+        var fn = Model.validators.required
+        var validators = rule.validators.filter(v => v.name === 'required')
+        var fail = fn(rule, validators[0], model, value)
+        addViolation(identifier, 'required', fail)
+        continue
+      }
 
       rule.validators.map(function (validator) {
         var fn = Model.validators[validator.name]
@@ -221,18 +245,8 @@ Model.compile = function Compile () {
           return error(fmt(msg, rule, validator.name), rule)
         }
 
-        if (!rule.required && checkType(value) === 'Undefined') return
-
-        var error = fn(rule, validator, model, value)
-
-        if (error) {
-          result.length++
-          result.rules[identifier] = result.rules[identifier] || []
-          result.rules[identifier].push({
-            validator: validator.name,
-            message: error
-          })
-        }
+        var fail = fn(rule, validator, model, value)
+        if (fail) addViolation(identifier, validator.name, fail)
       })
     }
     return result

@@ -1,7 +1,7 @@
 const test = require('tape')
 const Model = require('../index')
 const util = require('util')
-const now = require('../now')
+const now = require('date-at')
 
 const config = { colors: true, depth: null }
 
@@ -134,12 +134,10 @@ test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, C
   const r1 = m1({
   })
 
-  assert.equal(r1.length, 2, 'There must be two errors total')
-  assert.equal(r1.rules['created'].length, 2, 'Two errors found on the "created" rule')
-  assert.equal(r1.rules['created'][0].validator, 'type', 'First type is a type error')
-  assert.equal(r1.rules['created'][1].validator, 'required', 'Second type is a requirement error')
-  assert.equal(r1.rules['created'][0].message, 'Must contain a valid date', 'a custom type message')
-  assert.equal(r1.rules['created'][1].message, 'A date is required', 'a custom requirement message')
+  assert.equal(r1.length, 1, 'There must be two errors total')
+  assert.equal(r1.rules['created'].length, 1, 'error found on the "created" rule')
+  assert.equal(r1.rules['created'][0].validator, 'required', 'Second type is a requirement error')
+  assert.equal(r1.rules['created'][0].message, 'A date is required', 'a custom requirement message')
 
   const m2 = Model.compile(`
     Date created {
@@ -150,12 +148,10 @@ test('Type [Date], Single Rule, Custom Message, Single Validator, With Braces, C
   const r2 = m2({
   })
 
-  assert.equal(r2.length, 2, 'There must be two errors total')
-  assert.equal(r2.rules['created'].length, 2, 'Two errors found on the "created" rule')
-  assert.equal(r2.rules['created'][0].validator, 'type', 'First type is a type violation')
-  assert.equal(r2.rules['created'][1].validator, 'required', 'Second type is a requirement')
-  assert.equal(r2.rules['created'][0].message, '[undefined] is an invalid Date', 'standard type message')
-  assert.equal(r2.rules['created'][1].message, 'A value is required', 'standard requirement message')
+  assert.equal(r2.length, 1, 'There must be two errors total')
+  assert.equal(r2.rules['created'].length, 1, 'Two errors found on the "created" rule')
+  assert.equal(r2.rules['created'][0].validator, 'required', 'Second type is a requirement')
+  assert.equal(r2.rules['created'][0].message, 'A value is required', 'standard requirement message')
 
   assert.end()
 })

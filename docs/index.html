@@ -97,6 +97,22 @@
 <span class="pl-c1">Boolean</span> accountType
         </pre>
 
+      <h3>Custom Types</h3>
+      <p>Often you need to define a single type that you will use accross more
+      than one model.
+      <h4>example.model</h4>
+      <pre>
+<span class="pl-c1" title="Type">def</span> Password {
+  type <span class="pl-c1">String</span>
+  gte <span class="pl-n">3</span>
+  lte <span class="pl-n">15</span>
+  regexp <span class="pl-pds">/\d+/</span> <span class="pl-s"><span class="pl-pds">"</span>must contain at least one digit<span class="pl-pds">"</span></span>
+}
+
+Password mypass {
+  required true 'a pwd is reqd'
+}</pre>
+
       <h3>Directives</h3>
       <p>A model can contain the <b>@clean</b> directive which will ensure that
       any values not defined in the model are removed from the result.</p>

@@ -23,7 +23,8 @@ module.exports = function Parser (str) {
         lexer.match.whitespace()
         lexer.match.comment()
         lexer.match.anyspace()
-        tree.directives.push(directive.slice(1))
+        var arg = lexer.match.nonwhitespace()
+        tree.directives.push(directive.slice(1) + ' ' + arg)
         directive = lexer.match.directive(DIRECTIVE_SYMBOL)
         if (!directive) break
       }
@@ -51,20 +52,26 @@ module.exports = function Parser (str) {
     var ruleName = identifier[0]
 
     if (type === 'def') {
-      container = tree.types || (tree.types = {})
-      type = ruleName
+      if (!tree.types) tree.types = {}
+      container = tree.types
+      // type = ruleName
     }
 
     var rule = container[ruleName] = {
       message: message,
       pos: lexer.pos(),
-      type: type,
       rule: ruleName,
-      required: false,
-      validators: [{
+      required: false
+    }
+
+    if (type !== 'def') {
+      rule.type = type
+      rule.validators = [{
         name: 'type',
         value: type
       }]
+    } else {
+      rule.validators = []
     }
 
     lexer.match.whitespace()
