@@ -14,14 +14,18 @@
 
 
       <br>
-      <h3>Models</h3>
+      <h3 id="models"><a href="#models">Models</a></h3>
       <p>
         Every model consists of one or more declarative rules (see
         <a href="https://github.com/voltraco/dml">this project</a> for a
         nodejs reference implementation that also works in the browser).
       </p>
+      <p>
+        Models are compiled to a cachable json structure that is used to
+        validate data.
+      </p>
 
-      <h3>Rules</h3>
+      <h3 id="rules"><a href="#rules">Rules</a></h3>
       <p>
         Every rule in a model is defined by at least a <b>type</b> and a
         <b>path</b>. The type describes what kind of data is expected and the
@@ -42,7 +46,7 @@
       <p>A rule can also have a default error message.</p>
       <pre>
 <span class="pl-c1" title="Type">Date</span> <span title="Path">created</span> <span class="pl-s"><span class="pl-pds">"</span>Must be a valid date<span class="pl-pds">"</span></span></pre>
-      <h3>Validators</h3>
+      <h3 id="validators"><a href="#validators">Validators</a></h3>
       <p>
         In addition to a type, a rule can have zero or more validators. A
         validator is a function (it is possible to create custom validators).
@@ -73,7 +77,7 @@
 <span class="pl-c1">String</span> uuid {
   regExp <span class="pl-n">/[0-9]{1,3}.[0-9]{1,3}/</span>
 }</pre>
-      <h3>Comments</h3>
+      <h3 id="comments"><a href="#comments">Comments</a></h3>
       <p>Both inline and block comments are supported. They work the way you
       would expect any C-family language to work.</p>
         <pre>
@@ -97,7 +101,8 @@
 <span class="pl-c1">Boolean</span> accountType
         </pre>
 
-      <h3>Custom Types</h3>
+      <h3 id="custom-types"><a href="#custom-types">Custom Types</a></h3>
+
       <p>Often you need to define a single type that you will use accross more
       than one model.
       <h4>example.model</h4>
@@ -113,7 +118,7 @@
   required <span class="pl-c1">true</span> <span class="pl-s"><span class="pl-pds">'</span>a pwd is reqd<span class="pl-pds">'</span></span>
 }</pre>
 
-      <h3>Directives</h3>
+      <h3 id="directives"><a href="#directives">Directives</a></h3>
       <p>A model can contain the <b>@clean</b> directive which will ensure that
       any values not defined in the model are removed from the result.</p>
 

@@ -35,6 +35,11 @@ a {
   color: #999;
 }
 
+h3 a {
+  text-decoration: none;
+  color: initial;
+}
+
 header {
   padding-bottom: 30px;
   background: white;
