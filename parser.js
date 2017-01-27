@@ -1,3 +1,4 @@
+'use strict'
 var Lexer = require('./lexer')
 var LINE_HAS_STR_RE = /^.*['"](.*)(\n|$)/
 var DIRECTIVE_SYMBOL = '@'
@@ -54,7 +55,6 @@ module.exports = function Parser (str) {
     if (type === 'def') {
       if (!tree.types) tree.types = {}
       container = tree.types
-      // type = ruleName
     }
 
     var rule = container[ruleName] = {

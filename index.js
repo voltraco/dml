@@ -1,3 +1,4 @@
+'use strict'
 var opath = require('object-path')
 var date = require('date-at')
 var parse = require('./parser')
@@ -81,10 +82,10 @@ Model.validators.type = function (rule, validator, model, value) {
     var customType = model.types[rule.type]
 
     rule.validators = rule.validators
-      .filter(v => v.name !== 'type')
+      .filter(function (v) { return v.name !== 'type' })
       .concat(customType.validators)
 
-    rule.validators.map(v => {
+    rule.validators.map(function (v) {
       if (v.name === 'type') {
         expected = rule.type = v.value
       }
@@ -231,7 +232,9 @@ Model.compile = function Compile () {
 
       if (noValue) {
         var fn = Model.validators.required
-        var validators = rule.validators.filter(v => v.name === 'required')
+        var validators = rule.validators.filter(function (v) {
+          return v.name === 'required'
+        })
         var fail = fn(rule, validators[0], model, value)
         addViolation(identifier, 'required', fail)
         continue

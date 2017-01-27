@@ -1,3 +1,4 @@
+'use strict'
 var QUOTED_RE = /^["|']/
 var OPEN_RE = /^{\s*/
 var CLOSE_RE = /^}/
@@ -32,7 +33,7 @@ module.exports = function Lexer (str, options) {
     var m = re.exec(lexer.source)
     if (m === null) return
     var str = m[0]
-    //console.log('>', arguments.callee.caller.name, "'" + str + "'")
+    // console.log('>', arguments.callee.caller.name, "'" + str + "'")
     updatePosition(str)
     lexer.source = lexer.source.slice(m.index + str.length)
     return m
@@ -155,11 +156,11 @@ module.exports = function Lexer (str, options) {
   }
 
   pm.regex = function regex () {
-    const pair = lexer.peek(0, 2)
+    var pair = lexer.peek(0, 2)
     if (pair[0] !== '/' || pair === '//') return
 
-    let lastch = ''
-    let value = ''
+    var lastch = ''
+    var value = ''
     lexer.pop()
 
     while (true) {
@@ -167,7 +168,7 @@ module.exports = function Lexer (str, options) {
         lexer.error('missing end of regular expression')
       }
 
-      const ch = lexer.pop()
+      var ch = lexer.pop()
       if (ch === '/' && lastch !== '\\') break
       value += lastch = ch
     }
