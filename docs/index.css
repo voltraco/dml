@@ -75,8 +75,9 @@ h3 {
 }
 
 section[role="main"] {
-  max-width: 600px;
+  max-width: 800px;
   margin: 50px auto;
+  padding: 0 5%;
 }
 
 h4 {
