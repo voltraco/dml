@@ -76,3 +76,7 @@ https://voltra.co
 
 [![License](https://img.shields.io/npm/l/array.from.svg)](/LICENSE)
 
+# ART
+
+Icon by [Andreas](https://thenounproject.com/nl2bricons/)
+
