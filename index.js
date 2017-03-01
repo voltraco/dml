@@ -176,6 +176,8 @@ Model.compile = function Compile () {
     return typeof model === 'string' ? parse(model) : model
   })
 
+  models = models.filter(function (m) { return !!m })
+
   var model = { directives: [], rules: {}, types: {} }
 
   models.map(function (m) { // combine all models
