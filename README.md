@@ -10,9 +10,7 @@ A data modeling language reference implementation. See [dml.sh](http://dml.sh)
 Define a model using the data modeling language syntax
 
 ```js
-/*
- * An example data model
- */
+// An example data model
 
 Date created
 Number id
@@ -31,7 +29,7 @@ Boolean accountType
 ```
 
 ### index.js
-Create an instance of the model then pass data into it one or more times.
+Compiling a model returns a function that will validate data.
 
 ```js
 const Models = require('node-dml')
@@ -69,10 +67,4 @@ property containing information about the rules that were violated.
   }
 }
 ```
-
-# LICENSE
-
-https://voltra.co
-
-[![License](https://img.shields.io/npm/l/array.from.svg)](/LICENSE)
 

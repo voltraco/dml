@@ -171,6 +171,16 @@ Model.validator = function (name, fn) {
   Model.validators[name] = fn
 }
 
+function makeObject (rules) {
+  var o = {}
+  for (var identifier in rules) {
+    var r = rules[identifier]
+    var value = global[r.type] ? (new global[r.type]()).valueOf() : null
+    opath.set(o, r.rule, value)
+  }
+  return o
+}
+
 Model.compile = function Compile () {
   var models = [].slice.call(arguments).map(function (model) {
     return typeof model === 'string' ? parse(model) : model
@@ -207,6 +217,12 @@ Model.compile = function Compile () {
       data: data,
       length: 0,
       rules: {}
+    }
+
+    // there was no data, return an empty object on the data.
+    if (!data) {
+      result.data = makeObject(rules)
+      return result
     }
 
     // cleans all the data
@@ -257,4 +273,3 @@ Model.compile = function Compile () {
     return result
   }
 }
-
