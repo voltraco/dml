@@ -28,7 +28,7 @@ function compare (op, a, b) {
   }
 }
 
-module.eports = function Validate (model) {
+module.exports = function Validate (model) {
   const cleanFlag = typeof model.directives.clean !== 'undefined'
 
   const rules = model.rules
