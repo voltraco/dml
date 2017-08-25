@@ -1,131 +1,127 @@
 'use strict'
-var Lexer = require('./lexer')
-var LINE_HAS_STR_RE = /^.*['"](.*)(\n|$)/
-var DIRECTIVE_SYMBOL = '@'
+const opath = require('object-path')
 
-//
-// Parser() uses tokens from Lexer() to define the grammer for a
-// source stream and output a tree that can be cached or compiled.
-// Since we compile models ahead-of-time, there isn't any point in
-// optimizing this lexing & parsing into phases. So, just lex inline!
-// We will cache model later and throw the data at that structure.
-//
-module.exports = function Parser (str) {
-  var lexer = Lexer(str)
-  var tree = { directives: [], rules: {} }
-  var type = true
+const error = require('./error')
 
-  while (lexer.length() && type) {
-    lexer.match.anyspace()
+const tokens = {}
 
-    var directive = lexer.match.directive(DIRECTIVE_SYMBOL)
+tokens.indent = /^\s+/
+tokens.word = /^\w+/
+tokens.whitespace = /\s*/
+tokens.directive = /^@\w+/
+tokens.path = /\S+/
+tokens.string = /"(?:[^"\\]|\\.)*"/
+tokens.number = /^[\d.,]+/
+tokens.match = /^\/[^/]+\//
+
+tokens.linecomment = /\s+\/\/\s+/
+tokens.blockcomment = /(\/\*(.*?)\*\/)/
+
+module.exports = function Parser (source) {
+  const tree = { directives: { imports: [] }, rules: {} }
+
+  const lines = source.split(/\n/)
+  let parent = null
+
+  function matcher (re, no) {
+    var m = re.exec(lines[no])
+    if (m === null) return
+    var str = m[0]
+    lines[no] = lines[no].slice(m.index + str.length)
+    return m
+  }
+
+  function removeLineComments (lines, no) {
+    lines[no] = lines[no].split(tokens.linecomment)[0]
+  }
+
+  for (const no in lines) {
+    const line = lines[no]
+
+    removeLineComments(lines, no)
+
+    if (!line) continue
+
+    const indent = matcher(tokens.indent, no)
+
+    if (indent) {
+      if (!parent) {
+        return error('Found property without parent rule', lines, no)
+      }
+
+      const propname = matcher(tokens.word, no)
+      const rule = opath.get(tree.rules, parent)
+
+      matcher(tokens.whitespace, no)
+      const number = matcher(tokens.number, no)
+
+      matcher(tokens.whitespace, no)
+      const match = matcher(tokens.match, no)
+
+      matcher(tokens.whitespace, no)
+      const word = matcher(tokens.word, no)
+
+      matcher(tokens.whitespace, no)
+      const string = matcher(tokens.string, no)
+
+      matcher(tokens.whitespace, no)
+      const message = matcher(tokens.string, no)
+
+      if (propname) {
+        rule[propname[0]] = {}
+      } else {
+        return error('Expected property or type', lines, no)
+      }
+
+      if (number) rule[propname[0]].number = number[0].trim()
+      if (match) rule[propname[0]].match = match[0].trim()
+      if (word) rule[propname[0]].word = word[0].trim()
+
+      if ((word || number || match) && string) {
+        rule[propname[0]].message = string[0].trim()
+      } else {
+        if (string) rule[propname[0]].string = string[0].trim()
+      }
+
+      if (message) rule[propname[0]].message = message[0].trim()
+
+      continue
+    }
+
+    const directive = matcher(tokens.directive, no)
+
     if (directive) {
-      while (true) {
-        lexer.match.whitespace()
-        lexer.match.comment()
-        lexer.match.anyspace()
-        var arg = lexer.match.nonwhitespace()
-        tree.directives.push(directive.slice(1) + ' ' + arg)
-        directive = lexer.match.directive(DIRECTIVE_SYMBOL)
-        if (!directive) break
+      const type = directive[0].slice(1)
+      const value = lines[no].trim()
+      if (type === 'import') {
+        tree.directives.imports.push({ no, path: value })
+      } else {
+        tree.directives[type] = value
       }
+      continue
     }
 
-    lexer.match.comment()
-    lexer.match.anyspace()
-    type = lexer.match.word()
-    if (!type) break
+    const word = matcher(tokens.word, no)
 
-    lexer.match.whitespace()
-    var identifier = lexer.match.nonwhitespace()
-    if (!identifier) {
-      lexer.error('an identifier or object path is required')
-    }
+    if (word) {
+      const type = word[0]
+      const path = matcher(tokens.path, no)
+      const message = matcher(tokens.string, no)
 
-    var message = ''
-
-    if (lexer.exec(LINE_HAS_STR_RE)) {
-      lexer.match.whitespace()
-      message = lexer.match.string()
-    }
-
-    var container = tree.rules
-    var ruleName = identifier[0]
-
-    if (type === 'def') {
-      if (!tree.types) tree.types = {}
-      container = tree.types
-    }
-
-    var rule = container[ruleName] = {
-      message: message,
-      pos: lexer.pos(),
-      rule: ruleName,
-      required: false
-    }
-
-    if (type !== 'def') {
-      rule.type = type
-      rule.validators = [{
-        name: 'type',
-        value: type
-      }]
-    } else {
-      rule.validators = []
-    }
-
-    lexer.match.whitespace()
-    var open = lexer.match.open()
-
-    if (!open) continue
-    var close = lexer.match.close()
-    if (close) continue
-
-    lexer.match.anyspace()
-
-    while (true) {
-      lexer.match.comment()
-
-      //
-      // The first word is the name of the validator
-      //
-      var name = lexer.match.word()
-      lexer.match.whitespace()
-
-      var value = lexer.match.word()
-      lexer.match.whitespace()
-
-      if (!value) value = lexer.match.string()
-      if (!value) value = lexer.match.regex()
-      if (!value) lexer.error('a value is required')
-
-      lexer.match.whitespace()
-      lexer.match.comment()
-      lexer.match.whitespace()
-
-      if (name === 'required') {
-        rule.required = true
+      if (!path) {
+        return error('Rule has type but no property path or name', lines, no)
       }
 
-      if (name === 'optional') {
-        rule.optional = true
-      }
+      parent = path
 
-      rule.validators.push({
-        name: name,
-        value: value,
-        message: lexer.match.string() || ''
+      opath.set(tree.rules, path, {
+        type,
+        message: (message && message[0].trim()) || ''
       })
 
-      if (lexer.match.close()) break
-
-      lexer.match.whitespace()
-      lexer.match.comment()
-      lexer.match.whitespace()
-      lexer.match.newline()
-      lexer.match.whitespace()
-      if (lexer.match.close()) break
+      continue
     }
   }
+
   return tree
 }

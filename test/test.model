@@ -1,44 +1,36 @@
 
-// @clean   /* only use data that has been defined in the model */
+@import ./fixtures/a.model
+
+@clean   // only use data that has been defined in the model
 
 
-Date created {
+Date created
   lte now
-}
 
-String buzz { required true }
+String buzz
+  required true
+
 Boolean bazz
 
-/*
- *
- * Item with multiple properties
- *
- */
-
-String name "a name is required" {
+String name "a name is required"
   required true
-  match /^foo/ /* matching on a regular expression */
+  match /^foo/
   lt "a"
   gt 2 "greater than 2" // a length greater than 2
-}
 
-Number foo {
+Number foo 
   equal 20
-}
 
-Number xxx {
+Number xxx
   required true
   gt 10
-  }
 
-Number string {
+Number string
   equal "number"
-}
 
-String cheese {
+String cheese
   gte 2
   required true
-}
 
 Boolean bla.foo
 String bla.bar
