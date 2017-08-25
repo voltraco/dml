@@ -294,6 +294,20 @@ test('Type [String], perform a match on the value, alias (Passing)', assert => {
   assert.end()
 })
 
+test('Type [Number] that is not required should not complain about an empty value', assert => {
+  const m1 = Model.compile(`// This is a comment
+    Number foo {
+      lte 1000
+      gte 9999
+    }
+  `)
+
+  const result = m1({ foo: '' })
+  console.log(result.rules.foo)
+  assert.equal(result.length, 0)
+  assert.end()
+})
+
 test('Type [String], perform a match on the value (Failing)', assert => {
   const m1 = Model.compile(`
     String foo {

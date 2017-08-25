@@ -3,14 +3,20 @@ var opath = require('object-path')
 var date = require('date-at')
 var parse = require('./parser')
 var fmt = require('util').format
+var he = require('he')
 var checkType = require('./type')
 
 var Model = module.exports = {}
 
-function clean (data, model) {
+function clean (data, model, escapeData) {
   var output = {}
   for (var k in model) {
     var value = opath.get(data, k)
+
+    if (escapeData) {
+      value = he.escape(value)
+    }
+
     opath.set(output, k, value)
   }
   return output
@@ -75,6 +81,7 @@ Model.validators = {}
 
 Model.validators.type = function (rule, validator, model, value) {
   var originalValue = value
+  var subject = originalValue || typeof originalValue
   var expected = validator.value
 
   // merge in custom type validators
@@ -96,7 +103,7 @@ Model.validators.type = function (rule, validator, model, value) {
     value = parseInt(value, 10)
 
     if (isNaN(value)) {
-      return rule.message || fmt('[%s] is not a number', originalValue)
+      return rule.message || fmt('[%s] is not a number', subject)
     }
   }
 
@@ -104,7 +111,7 @@ Model.validators.type = function (rule, validator, model, value) {
     value = new Date(value)
 
     if (String(value).indexOf('Invalid') > -1) {
-      return rule.message || fmt('[%s] is an invalid Date', originalValue)
+      return rule.message || fmt('[%s] is an invalid Date', subject)
     }
   }
 
@@ -112,7 +119,7 @@ Model.validators.type = function (rule, validator, model, value) {
     try {
       value = new RegExp(value)
     } catch (ex) {
-      return rule.message || fmt('[%s] is an invalid regex', originalValue)
+      return rule.message || fmt('[%s] is an invalid regex', subject)
     }
   }
 
@@ -225,12 +232,21 @@ Model.compile = function Compile () {
       return result
     }
 
+    let escapeData = false
+
     // cleans all the data
-    if (model.directives.indexOf('clean') > -1) data = clean(data, rules)
+    if (model.directives.indexOf('escape') > -1) {
+      escapeData = true
+    }
+
+    if (model.directives.indexOf('clean') > -1) {
+      data = clean(data, rules, escapeData)
+    }
+
     // means all items are optional
-    var optional = model.directives.indexOf('optional') > -1
+    // var optional = model.directives.indexOf('optional') > -1
     // means all items are required
-    var required = model.directives.indexOf('required') > -1
+    // var required = model.directives.indexOf('required') > -1
 
     function addViolation (identifier, name, message) {
       result.length++
