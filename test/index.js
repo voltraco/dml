@@ -25,6 +25,9 @@ test('passing tests', assert => {
       t: true,
       f: false
     },
+    quxx: {
+      boop: 'beep'
+    },
     eq99: 99,
     lt10: 9,
     fuzzbar: 'OK',
@@ -43,6 +46,9 @@ test('passing tests', assert => {
     bool: {
       t: true,
       f: false
+    },
+    quxx: {
+      boop: 'beep'
     },
     html: '&lt;a href=&quot;as&quot;&gt;&lt;/a&gt;',
     eq99: 99,

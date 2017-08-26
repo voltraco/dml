@@ -1,11 +1,13 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Source+Code+Pro|Source+Sans+Pro" rel="stylesheet">
-    <link href="/index.css?v=1" rel="stylesheet">
+    <title>DML 2.0</title>
+    <link type="rel" href="https://fonts.googleapis.com/css?family=Poppins:400,700|Source+Code+Pro|Source+Sans+Pro" rel="stylesheet">
+    <link type="rel" href="/index.css?v=1" rel="stylesheet">
   </head>
   <body>
     <header>
-      <h1>DML 1.0</h1>
+      <h1>DML 2.0</h1>
       <h2>Data Modeling Language</h2>
     </header>
     <section role="main">
@@ -55,46 +57,39 @@
       </p>
       <h4>example.model</h4>
       <pre>
-<span class="pl-c1">String</span> user.name {
-  required <span class="pl-c1">true</span>
+<span class="pl-c1">String</span> user.name
+  required
   gt <span class="pl-n">2</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than 2 characters<span class="pl-pds">"</span></span>
   lte <span class="pl-n">256</span> <span class="pl-s"><span class="pl-pds">"</span>Must be less than or equal to 256 characters<span class="pl-pds">"</span></span>
-}</pre>
+</pre>
       <p>Rules that have validators can also have a default error <b>message</b>.</p>
       <pre>
-<span class="pl-c1">String</span> user.name <span class="pl-s"><span class="pl-pds">"</span>Must be a valid name<span class="pl-pds">"</span></span> {
+<span class="pl-c1">String</span> user.name <span class="pl-s"><span class="pl-pds">"</span>Must be a valid name<span class="pl-pds">"</span></span>
   required <span class="pl-c1">true</span>
-}</pre>
+</pre>
       <p>Built-in validators can also handle relative and absolute dates.</p>
       <pre>
-<span class="pl-c1">Date</span> birthday {
+<span class="pl-c1">Date</span> birthday
   gt <span class="pl-n">+1week</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than one week from now<span class="pl-pds">"</span></span>
-}</pre>
+</pre>
       <p>Built-in validators can also handle regular expressions.</p>
       <pre>
-<span class="pl-c1">String</span> uuid {
+<span class="pl-c1">String</span> uuid
   regExp <span class="pl-n">/[0-9]{1,3}.[0-9]{1,3}/</span>
-}</pre>
+</pre>
       <h3 id="comments"><a href="#comments">Comments</a></h3>
-      <p>Both inline and block comments are supported. They work the way you
-      would expect any C-family language to work.</p>
+      <p>C-style inline comments are supported.</p>
         <pre>
-<span class="pl-c">/*</span>
-<span class="pl-c"> * An example data model</span>
-<span class="pl-c"> */</span>
-
 <span class="pl-c1">Date</span> created
 <span class="pl-c1">Number</span> id
 
-<span class="pl-c1">String</span> name {
+<span class="pl-c1">String</span> name
   required <span class="pl-c1">true</span> <span class="pl-c">// this is a comment</span>
   gt <span class="pl-n">2</span> <span class="pl-s"><span class="pl-pds">"</span>Must be greater than 2 characters<span class="pl-pds">"</span></span>
   lte <span class="pl-n">256</span> <span class="pl-s"><span class="pl-pds">"</span>Must be less than or equal to 256 characters<span class="pl-pds">"</span></span>
-}
 
-<span class="pl-c1">String</span> bio <span class="pl-s"><span class="pl-pds">"</span>A bio must be a string<span class="pl-pds">"</span></span> {
+<span class="pl-c1">String</span> bio <span class="pl-s"><span class="pl-pds">"</span>A bio must be a string<span class="pl-pds">"</span></span>
   lte <span class="pl-n">140</span> <span class="pl-s"><span class="pl-pds">"</span>A bio must fit into a tweet<span class="pl-pds">"</span></span>
-}
 
 <span class="pl-c1">Boolean</span> accountType
         </pre>
@@ -105,16 +100,15 @@
       than one model.
       <h4>example.model</h4>
       <pre>
-<span class="pl-c1" title="Type">def</span> Password {
+<span class="pl-c1" title="Type">def</span> Password
   type <span class="pl-c1">String</span>
   gte <span class="pl-n">3</span>
   lte <span class="pl-n">15</span>
   regexp <span class="pl-n">/\d+/</span> <span class="pl-s"><span class="pl-pds">"</span>must contain at least one digit<span class="pl-pds">"</span></span>
-}
 
-<span class="pl-c1" title="Type">Password</span> mypass {
-  required <span class="pl-c1">true</span> <span class="pl-s"><span class="pl-pds">'</span>a pwd is reqd<span class="pl-pds">'</span></span>
-}</pre>
+<span class="pl-c1" title="Type">Password</span> mypass
+  require <span class="pl-s"><span class="pl-pds">'</span>a pwd is reqd<span class="pl-pds">'</span></span>
+</pre>
 
       <h3 id="directives"><a href="#directives">Directives</a></h3>
       <p>A model can contain the <b>@clean</b> directive which will ensure that

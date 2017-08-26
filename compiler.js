@@ -1,3 +1,4 @@
+'use strict'
 const path = require('path')
 const fs = require('fs')
 
@@ -31,6 +32,7 @@ module.exports = function Compile (source, pwd) {
       }
 
       const m = Compile(raw, path.dirname(include) || '')
+
       for (const key in m.rules) model.rules[key] = m.rules[key]
       for (const type in m.types) model.types[type] = m.types[type]
     })

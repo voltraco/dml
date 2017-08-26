@@ -1,10 +1,8 @@
 'use strict'
 const opath = require('object-path')
-
 const error = require('./error')
 
 const tokens = {}
-
 tokens.indent = /^\s+/
 tokens.word = /^\w+/
 tokens.whitespace = /\s*/
@@ -13,15 +11,17 @@ tokens.path = /\S+/
 tokens.string = /"(?:[^"\\]|\\.)*"/
 tokens.number = /^[\d.,]+/
 tokens.match = /^\/[^/]+\//
+tokens.define = /^def/
 
 tokens.linecomment = /\s+\/\/\s+/
 tokens.blockcomment = /(\/\*(.*?)\*\/)/
 
 module.exports = function Parser (source) {
-  const tree = { directives: { imports: [] }, rules: {} }
+  const tree = { directives: { imports: [] }, rules: {}, types: {} }
 
   const lines = source.split(/\n/)
   let parent = null
+  let parentIsType = false
 
   function matcher (re, no) {
     var m = re.exec(lines[no])
@@ -50,7 +50,7 @@ module.exports = function Parser (source) {
       }
 
       const propname = matcher(tokens.word, no)
-      const rule = opath.get(tree.rules, parent)
+      const rule = opath.get(parentIsType ? tree.types : tree.rules, parent)
 
       matcher(tokens.whitespace, no)
       const number = matcher(tokens.number, no)
@@ -101,9 +101,28 @@ module.exports = function Parser (source) {
       continue
     }
 
+    const def = matcher(tokens.define, no)
+
+    if (def) {
+      const name = def[0].trim()
+      const path = matcher(tokens.path, no)
+
+      if (!path) {
+        return error('Type has no name', lines, no)
+      }
+
+      parentIsType = true
+      parent = path
+
+      opath.set(tree.types, path, { name })
+      continue
+    }
+
     const word = matcher(tokens.word, no)
 
     if (word) {
+      parentIsType = false
+
       const type = word[0]
       const path = matcher(tokens.path, no)
       const message = matcher(tokens.string, no)

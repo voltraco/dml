@@ -1,3 +1,4 @@
+'use strict'
 module.exports = function error (message, lines, lineNo) {
   const no = parseInt(lineNo, 10)
 

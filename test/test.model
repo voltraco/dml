@@ -3,6 +3,13 @@
 
 @clean   // only use data that has been defined in the model
 
+
+def Foo
+  type String
+  lte 100
+
+Foo quxx.boop
+
 Date created
   lte now
 

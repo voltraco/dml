@@ -25,8 +25,6 @@ function compare (op, a, b) {
   }
 }
 
-const customTypes = {}
-
 function cast (type, value) {
   // return (new global[type](value)) // too easy
 
@@ -54,10 +52,6 @@ function cast (type, value) {
     }
   }
 
-  if (customTypes[type]) {
-    return customTypes[type](value)
-  }
-
   return null
 }
 
@@ -65,6 +59,8 @@ function cast (type, value) {
 // Validates that an object conforms to a model.
 //
 module.exports = function Validate (data, model) {
+  if (!data || !model) return
+
   const cleanFlag = typeof model.directives.clean !== 'undefined'
 
   if (cleanFlag) {
@@ -81,13 +77,22 @@ module.exports = function Validate (data, model) {
   }
 
   for (const rule in rules) {
-    const props = rules[rule]
+    let props = rules[rule]
+
+    //
+    // Check if this is a custom type, if so, extend the props.
+    //
+    if (model.types[props.type]) {
+      const extendedProps = model.types[props.type]
+      props = Object.assign(props, extendedProps)
+      props.type = props.type.word
+    }
 
     const rawValue = opath.get(data, rule)
     let value = cast(props.type, rawValue)
 
     //
-    // Check if the property if requied or not
+    // Check if the property if requied or not.
     //
     const required = props.required || props.require
 
@@ -98,7 +103,7 @@ module.exports = function Validate (data, model) {
     }
 
     //
-    // Check that the type is correct
+    // Check that the type is correct.
     //
     const actualType = type(value)
 
