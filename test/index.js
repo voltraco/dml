@@ -11,7 +11,7 @@ const model = compile(read('./test.model'))
 
 test('passing tests', assert => {
   const data = {
-    created: '12/24/2042',
+    created: '12/24/2002',
     name: 'john doe',
     html: '<a href="as"></a>',
     bla: {
@@ -39,7 +39,7 @@ test('passing tests', assert => {
   log(result)
 
   const expected = {
-    created: '12/24/2042',
+    created: '12/24/2002',
     bool: {
       t: true,
       f: false
@@ -64,30 +64,27 @@ test('failing tests', assert => {
   const data = {
     created: '12/24/2042',
     name: 'john doe',
-    html: '<a href="as"></a>',
+    html: 42,
     bla: {
       foo: true
     },
     from: {
-      a: 'OK',
-      b: 1
     },
     bool: {
-      t: true,
       f: false
     },
-    eq99: 99,
-    lt10: 9,
+    eq99: 1,
+    lt10: 10,
     fuzzbar: 'OK',
-    lte10: 10,
+    lte10: 11,
     butts: true,
     short: '12345678901234567890',
-    gt10: 11,
-    gte10: 10
+    gt10: 1,
+    gte10: 9
   }
 
   const result = validate(data, model)
-  log(result)
+  log(result.rules)
 
   assert.end()
 })

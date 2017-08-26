@@ -1,6 +1,6 @@
 {
   "name": "node-dml",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "description": "data model language",
   "main": "index.js",
   "scripts": {

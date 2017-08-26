@@ -6,7 +6,6 @@ const date = require('date-at')
 const type = require('./type')
 
 function clean (data, model) {
-  console.log(data, model)
   const output = {}
   for (const k in model) {
     let value = opath.get(data, k)
@@ -21,6 +20,7 @@ function compare (op, a, b) {
     case 'lte': return a <= b
     case 'gt': return a > b
     case 'gte': return a >= b
+    case 'equal':
     case 'eq': return a === b
   }
 }
@@ -34,7 +34,12 @@ function cast (type, value) {
     case 'Undefined': return undefined
     case 'RegExp': return new RegExp(value)
     case 'Date': return new Date(value)
-    case 'String': return String(value)
+    case 'String': {
+      if (isNaN(Number(value))) {
+        return String(value)
+      }
+      return Number(value)
+    }
     case 'Number': {
       value = parseInt(value, 10)
       if (isNaN(value) || typeof value === 'string') {
@@ -86,7 +91,7 @@ module.exports = function Validate (data, model) {
     //
     const required = props.required || props.require
 
-    if (required && typeof rawValue === 'undefined') {
+    if (required && (typeof rawValue === 'undefined')) {
       const message = required.message || `The property "${rule}" is required.`
 
       violation(rule, { proprety: 'required', message })
@@ -96,12 +101,13 @@ module.exports = function Validate (data, model) {
     // Check that the type is correct
     //
     const actualType = type(value)
-    console.log(rule, props.type, actualType)
+
     if (props.type !== actualType) {
       const message = props.message ||
         `Expected type "${props.type}" but got "${actualType}".`
 
       violation(rule, { property: 'type', message })
+      continue
     }
 
     //
@@ -129,20 +135,39 @@ module.exports = function Validate (data, model) {
     // Comparisons
     //
     for (const name in props) {
-      if (['lt', 'lte', 'gt', 'gte'].includes(name)) {
+      if (['lt', 'lte', 'gt', 'gte', 'eq', 'equal'].includes(name)) {
         let expected = null
-        if (props.type === 'Date') expected = date(props[name].word)
-        if (props.type === 'Number') expected = Number(props[name].number)
-        if (props.type === 'String') expected = String(props[name].string)
+        let actual = value
+        let r = null
 
-        const actual = value
-        const r = compare(props, actual, expected)
+        if (props.type === 'Date') {
+          expected = date(props[name].word)
+        }
 
-        if (r) {
+        if (props.type === 'Number') {
+          expected = Number(props[name].number)
+        }
+
+        //
+        // in the case where the user wants to specify lt(e)gt(e) on a string
+        // the result should be the measurement of the string's length.
+        //
+        if (props.type === 'String') {
+          if (props[name].number) {
+            actual = value.length
+            expected = Number(props[name].number)
+          } else {
+            expected = String(props[name].string)
+          }
+        }
+
+        r = compare(name, actual, expected)
+
+        if (!r) {
           const message = props[name].message ||
             `The value ${actual} was not ${name} ${expected}.`
 
-          violation(rule, { property: 'match', message })
+          violation(rule, { property: 'compare', message })
         }
       }
     }
