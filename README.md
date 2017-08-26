@@ -15,15 +15,13 @@ Define a model using the data modeling language syntax
 Date created
 Number id
 
-String name {
-  required true // this is a comment
+String name
+  require // this is a comment
   gt 2 "Must be greater than 2 characters"
   lte 256 "Must be less than or equal to 256 characters"
-}
 
-String bio "A bio must be a string" {
+String bio "A bio must be a string"
   lte 140 "A bio must fit into a tweet"
-}
 
 Boolean accountType
 ```

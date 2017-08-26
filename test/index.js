@@ -1,16 +1,93 @@
-const fs = require('fs')
-const util = require('util')
-const config = { colors: true, depth: null }
+const test = require('tape')
 
-const log = function (o) {
-  console.log(util.inspect(o, config))
-}
+const log = require('./log')
+const read = require('./read')
+const compile = require('../compiler')
+const validate = require('../validator')
 
 require('./types')
-const compile = require('../compiler')
-const validate = require('../validate')
 
-const str = fs.readFileSync(`${__dirname}/test.model`, 'utf8')
-const model = compile(str)
-const result = validate(str)
-log(result)
+const model = compile(read('./test.model'))
+
+test('passing tests', assert => {
+  const data = {
+    created: '12/24/2042',
+    name: 'john doe',
+    html: '<a href="as"></a>',
+    bla: {
+      foo: true
+    },
+    from: {
+      a: 'OK',
+      b: 1
+    },
+    bool: {
+      t: true,
+      f: false
+    },
+    eq99: 99,
+    lt10: 9,
+    fuzzbar: 'OK',
+    lte10: 10,
+    butts: true,
+    short: 'hello',
+    gt10: 11,
+    gte10: 10
+  }
+
+  const result = validate(data, model)
+  log(result)
+
+  const expected = {
+    created: '12/24/2042',
+    bool: {
+      t: true,
+      f: false
+    },
+    html: '&lt;a href=&quot;as&quot;&gt;&lt;/a&gt;',
+    eq99: 99,
+    gt10: 11,
+    lt10: 9,
+    short: 'hello',
+    gte10: 10,
+    fuzzbar: 'OK',
+    from: { a: 'OK', b: 1 }
+  }
+
+  assert.equal(result.length, 0)
+  assert.deepEqual(expected, result.data)
+
+  assert.end()
+})
+
+test('failing tests', assert => {
+  const data = {
+    created: '12/24/2042',
+    name: 'john doe',
+    html: '<a href="as"></a>',
+    bla: {
+      foo: true
+    },
+    from: {
+      a: 'OK',
+      b: 1
+    },
+    bool: {
+      t: true,
+      f: false
+    },
+    eq99: 99,
+    lt10: 9,
+    fuzzbar: 'OK',
+    lte10: 10,
+    butts: true,
+    short: '12345678901234567890',
+    gt10: 11,
+    gte10: 10
+  }
+
+  const result = validate(data, model)
+  log(result)
+
+  assert.end()
+})

@@ -3,35 +3,37 @@
 
 @clean   // only use data that has been defined in the model
 
-
 Date created
   lte now
 
-String buzz
-  required true
+Boolean bool.t
+  require
 
-Boolean bazz
+Boolean bool.f
+  require
 
-String name "a name is required"
-  required true
-  match /^foo/
-  lt "a"
-  gt 2 "greater than 2" // a length greater than 2
+String html
+  require
+  escape
 
-Number foo 
-  equal 20
+Number eq99
+  equal 99
 
-Number xxx
-  required true
+Number gt10
+  require
   gt 10
 
-Number string
-  equal "number"
+Number lt10
+  require
+  lt 10
 
-String cheese
-  gte 2
-  required true
+Number gte10
+  require
+  gte 10
 
-Boolean bla.foo
-String bla.bar
+String short
+  require
+  lt 16
 
+String fuzzbar
+  require

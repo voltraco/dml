@@ -74,7 +74,7 @@ module.exports = function Parser (source) {
       }
 
       if (number) rule[propname[0]].number = number[0].trim()
-      if (match) rule[propname[0]].match = match[0].trim()
+      if (match) rule[propname[0]].regex = match[0].trim()
       if (word) rule[propname[0]].word = word[0].trim()
 
       if ((word || number || match) && string) {

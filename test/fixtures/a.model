@@ -1,12 +1,5 @@
 @clean
 @import ./b.model
 
-String foo
-  required true
-
-String beep // shitfire foobar bazz
-  gte 14.4 // foobar
-  lte 5 "shizz"
-  required true
-
-Number bar.bazz
+String from.a
+  require

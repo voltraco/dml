@@ -4,6 +4,9 @@ const fs = require('fs')
 const parse = require('./parser')
 const error = require('./error')
 
+//
+// Handles imports and creating a model object via the parser.
+//
 module.exports = function Compile (source, pwd) {
   let model = {}
 
