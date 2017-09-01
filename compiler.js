@@ -5,9 +5,17 @@ const fs = require('fs')
 const parse = require('./parser')
 const error = require('./error')
 
+function merge (a, b) {
+  if (Array.isArray(a)) {
+    a = [...a, b]
+    return
+  }
+
+  a = { ...a, ...b }
+}
+
 //
 // Handles imports and creating a model object via the parser.
-//
 module.exports = function Compile (source, pwd) {
   let model = {}
 
@@ -18,25 +26,22 @@ module.exports = function Compile (source, pwd) {
     return null
   }
 
-  if (model.directives.imports.length) {
-    model.directives.imports.forEach(p => {
-      const include = path.resolve(pwd || '', p.path)
+  model.directives.imports.forEach(p => {
+    const include = path.resolve(pwd, p.path)
 
-      let raw = ''
+    let raw = ''
 
-      try {
-        raw = fs.readFileSync(include, 'utf8')
-      } catch (ex) {
-        const lines = source.split(/\n/)
-        return error(`Unable to read the file ${include}`, lines, p.no)
-      }
+    try {
+      raw = fs.readFileSync(include, 'utf8')
+    } catch (ex) {
+      const lines = source.split(/\n/)
+      return error(`Unable to read the file ${include}`, lines, p.no)
+    }
 
-      const m = Compile(raw, path.dirname(include) || '')
-
-      for (const key in m.rules) model.rules[key] = m.rules[key]
-      for (const type in m.types) model.types[type] = m.types[type]
-    })
-  }
+    const m = Compile(raw, path.dirname(include) || '')
+    for (const prop in m.rules) merge(model.rules[prop], m.rules[prop])
+    for (const prop in m.types) model.types[prop] = m.types[prop]
+  })
 
   return model
 }

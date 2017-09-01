@@ -32,12 +32,7 @@ function cast (type, value) {
     case 'Undefined': return undefined
     case 'RegExp': return new RegExp(value)
     case 'Date': return new Date(value)
-    case 'String': {
-      if (isNaN(Number(value))) {
-        return String(value)
-      }
-      return Number(value)
-    }
+    case 'String': return String(value)
     case 'Number': {
       value = parseInt(value, 10)
       if (isNaN(value) || typeof value === 'string') {
@@ -112,7 +107,7 @@ module.exports = function Validate (data, model) {
         `Expected type "${props.type}" but got "${actualType}".`
 
       violation(rule, { property: 'type', message })
-      continue
+      // continue
     }
 
     //
@@ -128,12 +123,15 @@ module.exports = function Validate (data, model) {
     const match = props.match || props.regex || props.RegExp
 
     if (match) {
-      if (!cast('RegExp', match.regex).exec(rawValue)) {
-        const message = match.message ||
-          `The expression ${match.regex} did not match the string "${rawValue}".`
+      match.forEach(m => {
+        console.log(cast('RegExp', m.regex), rawValue)
+        if (!cast('RegExp', m.regex).exec(rawValue)) {
+          const message = m.message ||
+            `The expression ${m.regex} did not match the string "${rawValue}".`
 
-        violation(rule, { property: 'match', message })
-      }
+          violation(rule, { property: 'match', message })
+        }
+      })
     }
 
     //

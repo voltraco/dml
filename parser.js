@@ -9,17 +9,16 @@ tokens.whitespace = /\s*/
 tokens.directive = /^@\w+/
 tokens.path = /\S+/
 tokens.string = /"(?:[^"\\]|\\.)*"/
+tokens.message = /"(?:[^"\\]|\\.)*"$/
 tokens.number = /^[\d.,]+/
-tokens.match = /^\/[^/]+\//
+tokens.match = /^\/([^/]+)\//
 tokens.define = /^def/
-
 tokens.linecomment = /\s+\/\/\s+/
-tokens.blockcomment = /(\/\*(.*?)\*\/)/
 
 module.exports = function Parser (source) {
   const tree = { directives: { imports: [] }, rules: {}, types: {} }
 
-  const lines = source.split(/\n/)
+  const lines = source && source.split(/\n/)
   let parent = null
   let parentIsType = false
 
@@ -36,9 +35,10 @@ module.exports = function Parser (source) {
   }
 
   for (const no in lines) {
-    const line = lines[no]
-
     removeLineComments(lines, no)
+
+    let [line, message] = lines[no].split(/\s*"([^"\\]+)"$/)
+    lines[no] = line
 
     if (!line) continue
 
@@ -64,26 +64,32 @@ module.exports = function Parser (source) {
       matcher(tokens.whitespace, no)
       const string = matcher(tokens.string, no)
 
-      matcher(tokens.whitespace, no)
-      const message = matcher(tokens.string, no)
-
       if (propname) {
-        rule[propname[0]] = {}
+        rule[propname[0]] = rule[propname[0]] || {}
       } else {
         return error('Expected property or type', lines, no)
       }
 
       if (number) rule[propname[0]].number = number[0].trim()
-      if (match) rule[propname[0]].regex = match[0].trim()
-      if (word) rule[propname[0]].word = word[0].trim()
 
-      if ((word || number || match) && string) {
-        rule[propname[0]].message = string[0].trim()
-      } else {
-        if (string) rule[propname[0]].string = string[0].trim()
+      if (match) {
+        const m = { regex: match[1].trim() }
+
+        if (message) {
+          m.message = message
+          message = null
+        }
+
+        if (!Array.isArray(rule[propname[0]])) {
+          rule[propname[0]] = []
+        }
+
+        rule[propname[0]].push(m)
       }
 
-      if (message) rule[propname[0]].message = message[0].trim()
+      if (word) rule[propname[0]].word = word[0].trim()
+      if (string) rule[propname[0]].string = string[0].trim()
+      if (message) rule[propname[0]].message = message
 
       continue
     }
@@ -112,7 +118,7 @@ module.exports = function Parser (source) {
       }
 
       parentIsType = true
-      parent = path
+      parent = path[0]
 
       opath.set(tree.types, path, { name })
       continue
@@ -125,22 +131,20 @@ module.exports = function Parser (source) {
 
       const type = word[0]
       const path = matcher(tokens.path, no)
-      const message = matcher(tokens.string, no)
 
       if (!path) {
         return error('Rule has type but no property path or name', lines, no)
       }
 
-      parent = path
+      parent = path[0]
 
-      opath.set(tree.rules, path, {
+      opath.set(tree.rules, parent, {
         type,
-        message: (message && message[0].trim()) || ''
+        message: (message && message.trim()) || ''
       })
 
       continue
     }
   }
-
   return tree
 }
