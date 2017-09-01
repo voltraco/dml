@@ -124,7 +124,6 @@ module.exports = function Validate (data, model) {
 
     if (match) {
       match.forEach(m => {
-        console.log(cast('RegExp', m.regex), rawValue)
         if (!cast('RegExp', m.regex).exec(rawValue)) {
           const message = m.message ||
             `The expression ${m.regex} did not match the string "${rawValue}".`
