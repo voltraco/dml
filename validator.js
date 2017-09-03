@@ -90,12 +90,12 @@ module.exports = function Validate (data, model) {
     // Check if the property if requied or not.
     //
     const required = props.required || props.require
-    const isUndefined = typeof rawValue === 'undefined'
+    const isUndefined = (typeof rawValue === 'undefined') || rawValue === ''
 
     if (required && isUndefined) {
       const message = required.message || `The property "${rule}" is required.`
 
-      violation(rule, { proprety: 'required', message })
+      violation(rule, { property: 'required', message })
     } else if (!required && isUndefined) {
       continue
     }
