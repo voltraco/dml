@@ -90,11 +90,14 @@ module.exports = function Validate (data, model) {
     // Check if the property if requied or not.
     //
     const required = props.required || props.require
+    const isUndefined = typeof rawValue === 'undefined'
 
-    if (required && (typeof rawValue === 'undefined')) {
+    if (required && isUndefined) {
       const message = required.message || `The property "${rule}" is required.`
 
       violation(rule, { proprety: 'required', message })
+    } else if (!required && isUndefined) {
+      continue
     }
 
     //
@@ -107,7 +110,6 @@ module.exports = function Validate (data, model) {
         `Expected type "${props.type}" but got "${actualType}".`
 
       violation(rule, { property: 'type', message })
-      // continue
     }
 
     //
