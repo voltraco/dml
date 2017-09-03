@@ -33,6 +33,8 @@ function cast (type, value) {
     case 'RegExp': return new RegExp(value)
     case 'Date': return new Date(value)
     case 'String': return String(value)
+    case 'Object': return value
+    case 'Array': return value
     case 'Number': {
       value = parseInt(value, 10)
       if (isNaN(value) || typeof value === 'string') {
