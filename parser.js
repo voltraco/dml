@@ -1,5 +1,4 @@
 'use strict'
-const opath = require('object-path')
 const error = require('./error')
 
 const tokens = {}
@@ -50,7 +49,7 @@ module.exports = function Parser (source) {
       }
 
       const propname = matcher(tokens.word, no)
-      const rule = opath.get(parentIsType ? tree.types : tree.rules, parent)
+      const rule = tree[parentIsType ? 'types' : 'rules'][parent]
 
       matcher(tokens.whitespace, no)
       const number = matcher(tokens.number, no)
@@ -120,7 +119,7 @@ module.exports = function Parser (source) {
       parentIsType = true
       parent = path[0]
 
-      opath.set(tree.types, path, { name })
+      tree.types[parent] = { name }
       continue
     }
 
@@ -138,10 +137,10 @@ module.exports = function Parser (source) {
 
       parent = path[0]
 
-      opath.set(tree.rules, parent, {
+      tree.rules[parent] = {
         type,
         message: (message && message.trim()) || ''
-      })
+      }
 
       continue
     }
