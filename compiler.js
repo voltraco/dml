@@ -5,15 +5,6 @@ const fs = require('fs')
 const parse = require('./parser')
 const error = require('./error')
 
-function merge (a, b) {
-  if (Array.isArray(a)) {
-    a = [...a, b]
-    return
-  }
-
-  a = { ...a, ...b }
-}
-
 //
 // Handles imports and creating a model object via the parser.
 module.exports = function Compile (source, pwd) {
@@ -39,8 +30,8 @@ module.exports = function Compile (source, pwd) {
     }
 
     const m = Compile(raw, path.dirname(include) || '')
-    for (const prop in m.rules) merge(model.rules[prop], m.rules[prop])
-    for (const prop in m.types) model.types[prop] = m.types[prop]
+    for (const rule in m.rules) model.rules[rule] = m.rules[rule]
+    for (const type in m.types) model.types[type] = m.types[type]
   })
 
   return model
