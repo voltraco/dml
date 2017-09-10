@@ -89,8 +89,7 @@ test('failing tests', assert => {
     gte10: 9
   }
 
-  const result = validate(data, model)
-  log(result.rules)
+  validate(data, model)
 
   assert.end()
 })

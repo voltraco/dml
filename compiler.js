@@ -18,7 +18,7 @@ module.exports = function Compile (source, pwd) {
   }
 
   model.directives.imports.forEach(p => {
-    const include = path.resolve(pwd, p.path)
+    const include = path.resolve(pwd || process.cwd(), p.path || '')
 
     let raw = ''
 

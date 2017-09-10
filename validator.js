@@ -9,10 +9,12 @@ function clean (data, model) {
   const output = {}
   for (const k in model) {
     let value = opath.get(data, k)
-    try {
-      opath.set(output, k, value)
-    } catch (_) {
-      output[k] = null
+    if (typeof value !== 'undefined') {
+      try {
+        opath.set(output, k, value)
+      } catch (_) {
+        output[k] = null
+      }
     }
   }
   return output
