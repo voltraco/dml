@@ -2,4 +2,4 @@
 @import ./b.model
 
 String from.a
-  require
+  require true 'is required'

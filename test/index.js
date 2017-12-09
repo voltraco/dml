@@ -1,6 +1,6 @@
 const test = require('tape')
 
-const log = require('./log')
+// const log = require('./log')
 const read = require('./read')
 const compile = require('../compiler')
 const validate = require('../validator')
@@ -39,7 +39,7 @@ test('passing tests', assert => {
   }
 
   const result = validate(data, model)
-  log(result)
+  // log(result)
 
   const expected = {
     created: '12/24/2002',
@@ -81,7 +81,6 @@ test('failing tests', assert => {
     },
     eq99: 1,
     lt10: 10,
-    fuzzbar: 'OK',
     lte10: 11,
     butts: true,
     short: '12345678901234567890',
@@ -89,7 +88,9 @@ test('failing tests', assert => {
     gte10: 9
   }
 
-  validate(data, model)
+  const violations = validate(data, model).rules
+
+  assert.ok(violations.fuzzbar[0].message === 'msg')
 
   assert.end()
 })

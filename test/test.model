@@ -43,4 +43,4 @@ String short
   lt 16
 
 String fuzzbar
-  require
+  require "msg"
