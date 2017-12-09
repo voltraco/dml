@@ -124,7 +124,11 @@ module.exports = function Validate (data, model) {
     // Escape if requested and the type is of String
     //
     if (props.escape && props.type === 'String') {
-      opath.set(data, rule, he.escape(value))
+      try {
+        opath.set(data, rule, he.escape(value))
+      } catch (ex) {
+        violation(rule, { property: 'type', message: ex.message })
+      }
     }
 
     //
